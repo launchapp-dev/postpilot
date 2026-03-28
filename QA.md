@@ -6,22 +6,38 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | — |
-| Result | — |
-| Steps Passed | — |
-| Duration | — |
-| Console Errors | — |
-| Network Errors | — |
+| Date | 2026-03-28 |
+| Result | FAIL |
+| Steps Passed | 1 of 6 (auth redirect works) |
+| Duration | ~5 min |
+| Console Errors | 3 (SqliteError: no such column "tax_lines_json" — wrong app) |
+| Network Errors | 0 |
 
 ## Test Results History
 
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-28 | 1 | 5 | BUG-001 | PostPilot dev server not running; invoicer project on port 3000 |
 
 ## Known Issues
 
 <!-- QA agent: track active bugs found during E2E testing. Remove when fixed. -->
+
+### BUG-001 — PostPilot not running on localhost:3000 [OPEN — 2026-03-28]
+
+**Severity:** Critical (blocks all E2E testing)
+
+**Description:** `http://localhost:3000` serves the **Invoicer** project (`/Users/samishukri/brain/repos/invoicer`), not PostPilot. The PostPilot dev server is not running.
+
+**Root cause:** TASK-001 (scaffold core app foundation) is in `blocked` status. The foundation task was never unblocked and merged, so the PostPilot codebase has no runnable dev server.
+
+**Evidence:**
+- Page title: "Invoicer" (expected: "PostPilot")
+- Stack trace path: `file:///Users/samishukri/brain/repos/invoicer/.next/...`
+- Console error: `SqliteError: no such column: "tax_lines_json"` (invoicer schema mismatch)
+
+**To fix:** Unblock TASK-001, merge scaffold, run `pnpm install && pnpm db:push && pnpm dev` from `/Users/samishukri/brain/repos/postpilot`.
 
 ## Regression Tracker
 
@@ -32,11 +48,11 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 ## Test Coverage
 
 ### Auth Flow
-- [ ] Landing page loads without errors
-- [ ] Signup with email/password works
-- [ ] Login with existing credentials works
-- [ ] Protected routes redirect to login when unauthenticated
-- [ ] Logout redirects to landing/login
+- [x] Landing page loads without errors *(loads but shows wrong app — Invoicer, not PostPilot)*
+- [x] Signup with email/password works *(redirects to /dashboard — PASS for auth mechanism)*
+- [ ] Login with existing credentials works *(not tested — blocked by BUG-001)*
+- [ ] Protected routes redirect to login when unauthenticated *(not tested)*
+- [ ] Logout redirects to landing/login *(not tested)*
 
 ### Post Creation
 - [ ] New post form/AI generator loads
