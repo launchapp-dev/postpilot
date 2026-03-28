@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import {
@@ -12,7 +12,11 @@ import {
   Link2,
   Megaphone,
   Settings,
+  LogOut,
 } from "lucide-react";
+import { createAuthClient } from "better-auth/react";
+
+const authClient = createAuthClient();
 
 const primaryNav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -29,6 +33,12 @@ const secondaryNav = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await authClient.signOut();
+    router.push("/login");
+  }
 
   function NavLink({
     href,
@@ -75,6 +85,17 @@ export function Sidebar() {
           <NavLink key={item.href} {...item} />
         ))}
       </nav>
+
+      <div className="mt-auto pt-4">
+        <Separator className="mb-4" />
+        <button
+          onClick={handleSignOut}
+          className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <LogOut className="h-4 w-4 shrink-0" />
+          Sign out
+        </button>
+      </div>
     </aside>
   );
 }
