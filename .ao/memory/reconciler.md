@@ -6,3 +6,9 @@ Read this FIRST every run. Append your decisions at the bottom.
 Each entry: `[DATE] — ACTION — DETAILS`
 
 ## Log
+
+[2026-03-29] — PROMOTE_BACKLOG — Promoted TASK-046 (landing page 500 fix), TASK-045 (db:push critical), TASK-047 (merge unmerged branches) from backlog to ready
+[2026-03-29] — UNBLOCK_TASKS — No blocked tasks found; 0 unblocked
+[2026-03-29] — MARK_DONE — All merged PR tasks already marked done (TASK-040, 038, 036, 034, 031, 029, 024); 0 newly marked
+[2026-03-29] — CLEAN_QUEUE — 1 queue entry (TASK-050 standard) is recent; 0 dropped
+[2026-03-29] — PIPELINE_STATUS — Ready: 4, Queue: 1, Open PRs: 0; NOT idle (no product-review triggered)
