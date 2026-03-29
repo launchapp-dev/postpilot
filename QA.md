@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 17) |
-| Result | FAIL — PostPilot dev server running on :3001 but hanging after BUG-015 crash. Server starts (PID 65539), logs BUG-015 buttonVariants() error on landing page, then stops responding to all HTTP. TCP connections accepted but no HTTP responses. All routes untestable. |
+| Date | 2026-03-29 (run 18) |
+| Result | FAIL — Same state as run 17. PostPilot PID 65539 on :3001 still hanging. No new code merged. TASK-082/083 ghost-done. button.tsx still present. 0/6 tests runnable. |
 | Steps Passed | 0 of 6 |
-| Duration | ~8 min |
-| Console Errors | BUG-015: buttonVariants() called from server component (confirmed in .next/dev/logs/next-development.log at 00:02:36) |
-| Network Errors | All HTTP requests to :3001 timeout — server hung after initial compile errors |
-| New Tasks Created | none — all failures are known bugs (BUG-015 root cause) |
+| Duration | ~5 min |
+| Console Errors | BUG-015: buttonVariants() from server component (same log entry as run 17, server started 00:02:36) |
+| Network Errors | All HTTP requests to :3001 timeout (curl --max-time 10 returns 000/exit 28) |
+| New Tasks Created | none — all failures are known bugs (BUG-015 root cause, TASK-086 exists) |
 
 ## Test Results History
 
@@ -24,6 +24,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-28 (run 15) | 1 | 5 | none | No new code merged since run 14. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). `/` 500 (SqliteError recycleCount). Login succeeds (browser → /dashboard crash). AI gen 500 (/api/posts/generate). Logout timeout (flaky, run 15). /posts/new + /settings (disabled) + /campaigns/new + /signup PASS. |
 | 2026-03-29 (run 16) | 0 | 6 | none | BLOCKED — PostPilot dev server not running. Port 3000 = launchapp-nextjs (ZodError: DATABASE_URL missing). Ports 3001/3002 also launchapp-nextjs. No PostPilot process found. Environment changed since run 15 — PostPilot previously ran on :3001. |
 | 2026-03-29 (run 17) | 0 | 6 | none | FAIL — PostPilot dev server running on :3001 (PID 65539). Server started, hit BUG-015 buttonVariants() crash at 00:02:36 per dev log, then stopped responding to all HTTP requests. TCP connections accepted but hang indefinitely. No new code merged since run 16 (only memory/planner commits). All known bugs persist. |
+| 2026-03-29 (run 18) | 0 | 6 | none | FAIL — Same PID 65539 on :3001, same HTTP hang. No new code merged since run 17 (memory/planner/reconciler/product-owner commits only). TASK-082/083 ghost-done: button.tsx still exists. TASK-086 is 18th attempt. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -171,6 +172,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-28 (run 15) | All routes | same as run 14 | same as run 14 | No new merges to main since run 14 — app state unchanged |
 | 2026-03-29 (run 16) | App reachable | PASS (run 15, :3001) | BLOCKED (not running) | PostPilot dev server stopped. Environment changed: ports 3000/3001/3002 all occupied by launchapp-nextjs instances. |
 | 2026-03-29 (run 17) | App reachable | BLOCKED (run 16) | FAIL (hanging) | PostPilot dev server back on :3001. Server starts but hangs after BUG-015 buttonVariants() crash — accepts TCP but stops processing HTTP. |
+| 2026-03-29 (run 18) | App reachable | FAIL (run 17) | FAIL (hanging) | Same PID 65539 still running on :3001, still hanging. No changes to codebase since run 17. TASK-082/083 ghost-done. |
 
 ## Test Coverage
 
@@ -265,7 +267,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ## Environment Notes
 
-- App URL: http://localhost:3001 (run 17 confirmed) — PostPilot dev server running on :3001 (PID 65539). Port 3000 = CondoHub, port 3002 = Invoicer. However, server hangs after BUG-015 crash on `/` route — all HTTP requests timeout. Server logs confirm BUG-015 is active.
+- App URL: http://localhost:3001 (run 18 confirmed) — PostPilot dev server running on :3001 (PID 65539, same process since run 17). Port 3000 = CondoHub, port 3002 = Invoicer. Server hangs after BUG-015 crash — all HTTP requests timeout (curl exit 28). Dev log shows last error at 00:02:36 (BUG-015). TASK-086 is 18th attempt to delete button.tsx.
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
