@@ -21,8 +21,8 @@ mcp_servers:
     command: npx
     args: ["-y", "mcp-package-version"]
   playwright:
-    command: npx
-    args: ["-y", "@playwright/record-mcp@latest", "--record", "--record-format", "webm", "--output-dir", "/Users/samishukri/mcprecording/postpilot"]
+    command: node
+    args: ["~/playwright-record-mcp/cli.js", "--headless", "--record-video", "--video-dir", "~/mcprecording/postpilot"]
 
 agents:
   default:
