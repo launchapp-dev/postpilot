@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 8) |
-| Result | FAIL — No new fixes deployed since run 7. All run 7 bugs still open: Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics/campaigns 500 (BUG-016/017); /accounts 404 (BUG-007); /settings + /posts/new PASS; auth PASS |
+| Date | 2026-03-28 (run 9) |
+| Result | FAIL — No new fixes deployed since run 8. All run 7/8 bugs still open: Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics 500 (BUG-016); /campaigns 500 (BUG-017); /accounts 404 (BUG-007); /settings + /posts/new + auth PASS |
 | Steps Passed | 1 of 6 |
 | Duration | ~10 min |
 | Console Errors | SqliteError recycleCount (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
 | Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 500 (Anthropic 401 invalid x-api-key), /accounts 404 |
-| New Tasks Created | none — all failures are known bugs from run 7, TASK-045/046/047 still open |
+| New Tasks Created | none — all failures are known bugs. TASK-045/046/047 still in backlog. Local branches ao/task-008/037/039/041 unmerged (TASK-047 open) |
 
 ## Test Results History
 
@@ -27,6 +27,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 6) | 4 | 2 | TASK-035 | BUG-011 RESOLVED: pnpm db:push run (TASK-028 done), dashboard/posts/calendar all PASS. Recurring unmerged-branches: TASK-009/014/015/027/029 done in worktrees but not on main — TASK-035 created. AI gen still 500 (no ANTHROPIC_API_KEY). Accounts 404 (TASK-008 still ready). |
 | 2026-03-29 (run 7) | 1 | 5 | TASK-045, TASK-046, TASK-047 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
 | 2026-03-29 (run 8) | 1 | 5 | none | No new fixes deployed since run 7. All run 7 bugs persist. AI gen HTTP 500 wrapping Anthropic 401 (run 7 note of "401" was inaccurate — HTTP status has always been 500). TASK-043 marked done but ao/task-008 still not merged to main — /accounts still 404. TASK-045/046/047 still in backlog. |
+| 2026-03-28 (run 9) | 1 | 5 | none | No new fixes deployed since run 8. App state identical to run 8. No new commits to main. Local branches ao/task-008/037/039/041 still unmerged. TASK-045/046/047 remain in backlog. Recurring unmerged-branch pattern continues — TASK-047 created but not actioned. |
 
 ## Known Issues
 
@@ -146,6 +147,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 7) | /campaigns | 404 (run 6) | 500 (run 7) | TASK-035 merged campaign code, pnpm db:push not run — campaign table missing — BUG-017 |
 | 2026-03-29 (run 7) | /analytics | 404 (run 6) | 500 (run 7) | TASK-015 merged analytics code, recycleCount column missing — BUG-016 |
 | 2026-03-29 (run 8) | All routes | same as run 7 | same as run 7 | No new merges to main since run 7 — app state unchanged |
+| 2026-03-28 (run 9) | All routes | same as run 8 | same as run 8 | No new merges to main since run 8 — app state unchanged |
 
 ## Test Coverage
 
@@ -202,6 +204,23 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] Date range filtering works *(not tested)*
 - [ ] Charts render correctly *(not tested)*
 
+### Content Recycling
+- [ ] Recycling rules visible in UI *(not tested — TASK-031 merged but recycleCount/noRecycle columns cause crash on DB-dependent routes — BUG-016)*
+- [ ] Evergreen post identification works *(not tested — blocked by BUG-016)*
+- [ ] Exclude-from-recycling flag works *(not tested — blocked by BUG-016)*
+
+### Bulk Actions (ao/task-037 — unmerged)
+- [ ] Select multiple posts with checkboxes *(not tested — TASK-037 done but in local branch, not on main)*
+- [ ] Bulk reschedule works *(not tested)*
+- [ ] Bulk delete works *(not tested)*
+- [ ] Bulk duplicate works *(not tested)*
+
+### Engagement Prediction (ao/task-039 — unmerged)
+- [ ] Engagement score shown on /posts/new before publish *(not tested — TASK-039 done but in local branch, not on main)*
+
+### Calendar Drag-and-Drop (ao/task-041 — unmerged)
+- [ ] Posts can be dragged to new dates *(not tested — TASK-041 done but in local branch, not on main)*
+
 ### Settings
 - [x] Settings page loads *(PASS — 2026-03-29 run 7 — /settings returns 200, brand voice content visible)*
 - [x] Multi-voice brand voice configuration present *(PASS — 2026-03-29 run 7 — voice-related content rendered, TASK-038)*
@@ -228,4 +247,4 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
 - Test credentials: qa-test@postpilot.dev / TestPass123!
-- Unmerged branches: ao/task-008 (social accounts), ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop)
+- Unmerged branches: ao/task-008 (social accounts), ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop) — all done locally, none pushed to origin or merged to main as of run 9
