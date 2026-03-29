@@ -41,42 +41,22 @@ echo "Found PR #$pr_number"
 latest_review=$(echo "$pr_json" | jq -r '.reviews[-1].state // "NONE"')
 echo "Latest review: $latest_review"
 
-# Check PR comments for "Verdict: APPROVE" — handles self-review where GitHub
-# blocks the formal review API (author cannot approve their own PR)
-if [ "$latest_review" = "NONE" ] || [ "$latest_review" = "COMMENTED" ]; then
-  approve_comment=$(gh pr view "$pr_number" --repo "$REPO" --json comments --jq '.comments[].body' 2>/dev/null | grep -ci "verdict.*approve" || true)
-  if [ "$approve_comment" -gt 0 ]; then
-    echo "Found 'Verdict: APPROVE' in PR comments — treating as approved"
-    latest_review="APPROVED"
-  fi
-fi
-
-if [ "$latest_review" = "APPROVED" ]; then
-  echo "APPROVED — merging PR #$pr_number"
-  if gh pr merge "$pr_number" --repo "$REPO" --squash --delete-branch 2>&1; then
-    echo "MERGED — marking $task_id as done"
-    ao --project-root "$PROJECT_ROOT" task status --id "$task_id" --status done 2>/dev/null || true
-    exit 0
-  else
-    echo "MERGE FAILED (conflicts?) — queuing rebase"
-    ao --project-root "$PROJECT_ROOT" queue enqueue --task-id "$task_id" --workflow-ref rebase-and-retry 2>/dev/null || true
-    exit 0
-  fi
-fi
-
+# If review explicitly requested changes, route to rework
 if [ "$latest_review" = "CHANGES_REQUESTED" ]; then
   echo "CHANGES REQUESTED — queuing rework for $task_id"
   ao --project-root "$PROJECT_ROOT" queue enqueue --task-id "$task_id" --workflow-ref rework 2>/dev/null || true
   exit 0
 fi
 
-echo "NO REVIEW — attempting merge of PR #$pr_number"
+# Otherwise — merge. The pr-review phase already validated the code.
+# Self-review blocks GitHub's formal approve API, so we just merge directly.
+echo "Merging PR #$pr_number"
 if gh pr merge "$pr_number" --repo "$REPO" --squash --delete-branch 2>&1; then
   echo "MERGED — marking $task_id as done"
   ao --project-root "$PROJECT_ROOT" task status --id "$task_id" --status done 2>/dev/null || true
   exit 0
 else
-  echo "MERGE FAILED — queuing rebase"
+  echo "MERGE FAILED (conflicts?) — queuing rebase"
   ao --project-root "$PROJECT_ROOT" queue enqueue --task-id "$task_id" --workflow-ref rebase-and-retry 2>/dev/null || true
   exit 0
 fi
