@@ -42,3 +42,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-29 17:36:10Z] — CLEAN_QUEUE — 1 assigned queue entry (product-review, assigned 2.8m ago) actively processing; 0 dropped
 [2026-03-29 17:36:10Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
 [2026-03-29 17:36:10Z] — PIPELINE_STATUS — Ready: 0, Queue: 1 (assigned, product-review processing), Open PRs: 0; NOT idle
+[2026-03-29 18:33:15Z] — UNBLOCK_TASKS — No blocked tasks; 0 unblocked
+[2026-03-29 18:33:15Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-29 18:33:15Z] — RE_ROUTE_FAILED — No in-progress/review tasks with failures; 0 re-routed
+[2026-03-29 18:33:15Z] — CLEAN_QUEUE — 2 assigned queue entries (TASK-104 triage 1.2m, TASK-108 triage 57s); both fresh, actively processing; 0 dropped
+[2026-03-29 18:33:15Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
+[2026-03-29 18:33:15Z] — PIPELINE_STATUS — Ready: 3 (TASK-104, TASK-107, TASK-108), Queue: 2 (assigned, both triage), Open PRs: 0; NOT idle (active pipeline)
