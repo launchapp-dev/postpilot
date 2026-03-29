@@ -269,4 +269,12 @@ Each entry: `[DATE] — DECISION — REASON`
 
 [2026-03-29] — NO NEW TASKS CREATED (run 33) — 3 open tasks already cover all top priorities: TASK-107 [critical/enqueued], TASK-104 [high/enqueued], TASK-108 [medium/ready]. No duplicates created. 2-task limit not needed (no gaps beyond existing tasks).
 
+[2026-03-29] — HEALTH CHECK PASS (run 34) — pnpm install OK, pnpm build OK (16 routes: /, /analytics, /api/auth/[...all], /api/posts/generate, /calendar, /campaigns, /campaigns/[id], /campaigns/new, /dashboard, /login, /posts, /posts/[id], /posts/new, /settings, /signup, /_not-found). Better Auth env-var warnings only (expected). /accounts still NOT in build routes — confirms ghost-done.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 34) — TASK-107 (button.tsx delete) ghost-done: button.tsx still present at src/components/ui/button.tsx alongside button.ts. TASK-104 (accounts pages) ghost-done: src/app/accounts/ still does not exist, socialAccount table not in schema.ts. git log shows only memory/planner/qa commits (latest: ae96c22). TASK-107/104 are "assigned" in queue (not done/cancelled).
+
+[2026-03-29] — NO NEW TASKS CREATED (run 34) — 3 open tasks cover all current gaps: TASK-107 [critical/assigned in queue], TASK-104 [high/assigned in queue], TASK-108 [medium/blocked]. Queue already has TASK-107 and TASK-104 assigned. Creating duplicates would waste pipeline capacity. Pipeline is HEALTHY.
+
+[2026-03-29] — PIPELINE STATUS (run 34) — 3 open tasks: TASK-107 [critical/assigned], TASK-104 [high/assigned], TASK-108 [medium/blocked]. HEALTHY.
+
 [2026-03-29] — PIPELINE STATUS (run 33) — 3 open tasks: TASK-107 [critical/enqueued], TASK-104 [high/enqueued], TASK-108 [medium/ready]. HEALTHY. Requirements: 0.
