@@ -6,8 +6,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 26) |
-| Result | PARTIAL PASS — No new code merged since run 25 (only memory/planner commits). Server running on :3001 (PID 53838). BUG-015 (`/` 500) persists. BUG-007 (/accounts 404) persists. BUG-012 (AI gen 503) persists. All other 10 routes 200. Auth PASS (login 200, session token obtained). No new bugs found. |
+| Date | 2026-03-29 (run 27) |
+| Result | PARTIAL PASS — No new code merged since run 26 (only memory/planner/reconciler commits). Server on :3001 (PID 53893). BUG-015 (`/` 500) persists. BUG-007 (/accounts 404) persists. BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS (login → /dashboard). Save Draft PASS (post /posts/egres979jrmncbbnzs created, appeared in dashboard). Logout timeout (flaky, 26th+ consecutive). No new bugs found. |
 | Steps Passed | 4 of 6 |
 | Duration | ~10 min |
 | Console Errors | BUG-015 500 on `/`; BUG-019 asChild DOM warning on all auth routes; BUG-013 error=false on /posts/new; BUG-012 503 on AI gen |
@@ -33,6 +33,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 24) | 4 | 2 | none | No new code merged since run 23 (memory/planner commits only). Server started manually on :3001 (PID 44004). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (login → dashboard). Platform select + manual content entry PASS. Logout timeout (flaky, 24th consecutive). Health score ~72/100. |
 | 2026-03-29 (run 25) | 4 | 2 | none | No new code merged since run 24 (memory/planner commits only). Server already running on :3001. `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (login → /dashboard confirmed via browser). Save Draft PASS (redirected to /posts/s1xqtc5dlbmnc98z4i, dashboard shows 3 drafts). Logout timeout (flaky, 25th consecutive). Only known console errors (BUG-019 asChild, BUG-013 error=false). |
 | 2026-03-29 (run 26) | 4 | 2 | none | No new code merged since run 25 (only memory/planner commits). Server on :3001 (PID 53838). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other 10 routes 200 when authenticated. Auth PASS (POST /api/auth/sign-in/email 200, session token obtained). No new bugs found. |
+| 2026-03-29 (run 27) | 4 | 2 | none | No new code merged since run 26 (only memory/planner/reconciler commits). Server on :3001 (PID 53893). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (login → /dashboard). Save Draft PASS (post created, appeared in dashboard). Logout timeout (flaky, 26th+ consecutive). No new bugs found. |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
