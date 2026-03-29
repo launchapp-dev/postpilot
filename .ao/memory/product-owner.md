@@ -54,3 +54,17 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — CREATED TASK-056 [high/feature, ready, enqueued:triage] — Build Social Accounts pages (/accounts, /accounts/new, /accounts/[id]). TASK-051 and TASK-053 were both ghost-done. Includes: socialAccount table in schema.ts, pnpm db:push, server actions, 3 pages. Added ghost-done prevention checklist to description.
 
 [2026-03-29] — PIPELINE STATUS — 2 open tasks after run (TASK-055 critical/enqueued, TASK-056 high/enqueued). HEALTHY. Post dashboard filters (TASK-054 ghost-done) deferred to next cycle — 2-task limit reached.
+
+[2026-03-29] — HEALTH CHECK PASS — pnpm install OK, pnpm build OK (15 routes, 0 errors). Better Auth env-var warnings only. /accounts still NOT in build route listing — confirms TASK-056 ghost-done.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 13) — TASK-055 (button.tsx delete) ghost-done: button.tsx still exists alongside button.ts. TASK-056 (accounts pages) ghost-done: src/app/accounts/ still missing, socialAccount table not in schema.ts. ao/task-055 and ao/task-056 have zero unique commits vs main.
+
+[2026-03-29] — PIPELINE WAS EMPTY — All 58 prior tasks done/cancelled except TASK-057 [blocked/low] (Playwright smoke test). No open work items.
+
+[2026-03-29] — CREATED TASK-058 [critical/bugfix, ready, enqueued:triage] — Delete button.tsx to fix dev 500. Explicit ghost-done prevention checklist added. Prior attempts: TASK-046, TASK-055 (both ghost-done).
+
+[2026-03-29] — CREATED TASK-059 [high/feature, ready, enqueued:triage] — Build Social Accounts pages (/accounts, /accounts/new, /accounts/[id]) + socialAccount DB schema + server actions. Full implementation spec in description. Ghost-done prevention checklist added. Prior attempts: TASK-008, TASK-042 (cancelled), TASK-049, TASK-051, TASK-053, TASK-056 (all ghost-done).
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Next cycle should create a task for this if TASK-058/059 are genuinely done.
+
+[2026-03-29] — PIPELINE STATUS — 2 open tasks (TASK-058 critical/enqueued, TASK-059 high/enqueued). HEALTHY.
