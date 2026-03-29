@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 11) |
-| Result | FAIL — No new code merged since run 10. All known bugs persist. TASK-052/053/054 marked done but all have 0 commits ahead of main (same empty-branch pattern, 11th recurrence). New finding: settings table missing from DB — all settings form fields permanently disabled (server action fails silently). Root cause same: pnpm db:push never run. Auth + /posts/new + /settings (loads only) + /campaigns/new PASS. Logout click timed out (flaky). |
+| Date | 2026-03-29 (run 12) |
+| Result | FAIL — No new code merged since run 11. App state identical. All known bugs persist. Auth + /posts/new + /settings (loads only, all fields disabled) + /campaigns/new PASS. Logout click timed out again (flaky, same as run 11). |
 | Steps Passed | 1 of 6 |
-| Duration | ~20 min |
-| Console Errors | SqliteError recycleCount (BUG-016), React DOM prop warning asChild/error (BUG-013), POST /settings 500 (settings table missing) |
-| Network Errors | `/` 500 (BUG-015), /dashboard 500 (BUG-016), /posts 500, /calendar 500, /analytics 500, /campaigns 500 (BUG-017), /api/posts/generate 500 (BUG-012), /accounts 404 (BUG-007), POST /settings 500 (settings+brandVoice tables missing from DB) |
-| New Tasks Created | none — all failures are known bugs. TASK-052/053/054 marked done but have zero unique commits. |
+| Duration | ~15 min |
+| Console Errors | SqliteError recycleCount (BUG-016), React DOM prop warning asChild/error (BUG-013), favicon 404 (BUG-009) |
+| Network Errors | `/` 500 (BUG-015), /dashboard 500 (BUG-016), /posts 500, /calendar 500, /analytics 500, /campaigns 500 (BUG-017), /accounts 404 (BUG-007) |
+| New Tasks Created | none — all failures are known bugs |
 
 ## Test Results History
 
@@ -30,6 +30,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-28 (run 9) | 1 | 5 | none | No new fixes deployed since run 8. App state identical to run 8. No new commits to main. Local branches ao/task-008/037/039/041 still unmerged. TASK-045/046/047 remain in backlog. Recurring unmerged-branch pattern continues — TASK-047 created but not actioned. |
 | 2026-03-29 (run 10) | 1 | 5 | none | TASK-050 (bulk actions) merged to main since run 9. All other known bugs persist. TASK-045/046/047/051 all marked done but branches have zero unique commits — no work was actually committed. ao/task-008 has accounts fix (1 unique commit) but still not merged despite 8+ merge tasks. AI gen now shows raw 401 JSON to user. Bulk actions exist in code but untestable (dashboard 500). |
 | 2026-03-29 (run 11) | 1 | 5 | none | No new code merged since run 10. TASK-052/053/054 marked done but all have 0 commits ahead of main (11th recurrence of empty-done-branch pattern). NEW FINDING: settings table missing from DB — settings form fields stay disabled forever (POST /settings → 500 silently fails). Also: settings, brandVoice, campaign tables ALL missing — only account/post/session/user/verification exist in postpilot.db. pnpm db:push has NEVER been run since TASK-031 schema changes. |
+| 2026-03-29 (run 12) | 1 | 5 | none | No new code merged since run 11. App state identical. All known bugs persist (BUG-007/015/016/017/018). Login succeeds (auth API 200) but dashboard immediately crashes (SqliteError: recycleCount). Logout flaky (timeout). |
 
 ## Known Issues
 
@@ -158,6 +159,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-28 (run 9) | All routes | same as run 8 | same as run 8 | No new merges to main since run 8 — app state unchanged |
 | 2026-03-29 (run 10) | All routes | same as run 9 | same as run 9 | TASK-050 merged but only adds bulk actions code; dashboard still crashes (BUG-016) — bulk actions untestable |
 | 2026-03-29 (run 11) | Settings form usable | UNVERIFIED (not tested) | FAIL (fields permanently disabled) | settings/brandVoice tables missing from DB — server action silently fails, loading state never resolves |
+| 2026-03-29 (run 12) | All routes | same as run 11 | same as run 11 | No new merges to main since run 11 — app state unchanged |
 
 ## Test Coverage
 
