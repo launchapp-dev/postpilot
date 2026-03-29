@@ -50,6 +50,22 @@ export const verification = sqliteTable("verification", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }),
 });
 
+export const settings = sqliteTable("settings", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  brandName: text("brandName"),
+  industry: text("industry"),
+  website: text("website"),
+  defaultTone: text("defaultTone"),
+  topicsToAvoid: text("topicsToAvoid"),
+  emailAlerts: integer("emailAlerts", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+});
+
 export const post = sqliteTable("post", {
   id: text("id").primaryKey(),
   userId: text("userId")
