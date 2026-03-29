@@ -24,3 +24,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-28] — CLEAN_QUEUE — Queue empty; 0 dropped
 [2026-03-28] — MARK_DONE — All 8 merged PRs already tracked; 0 newly marked
 [2026-03-28] — IDLE_PIPELINE — Ready: 0, Queue: 0, In-progress: 0, Open PRs: 0; IDLE—product-review triggered
+[2026-03-29 14:23:24Z] — UNBLOCK_TASKS — Unblocked TASK-057 (Playwright smoke test) from workflow runner failure, set to ready for retry; 1 unblocked
+[2026-03-29 14:23:24Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-29 14:23:24Z] — RE_ROUTE_FAILED — Handled via TASK-057 unblock; 0 re-routed
+[2026-03-29 14:23:24Z] — CLEAN_QUEUE — 1 queue entry (product-review) was assigned and likely executed by daemon, queue now empty; 0 dropped manually
+[2026-03-29 14:23:24Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
+[2026-03-29 14:23:24Z] — PIPELINE_STATUS — Ready: 1, Queue: 0, Open PRs: 0; NOT idle (1 ready task queued for execution)
