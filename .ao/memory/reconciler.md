@@ -48,3 +48,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-29 18:33:15Z] — CLEAN_QUEUE — 2 assigned queue entries (TASK-104 triage 1.2m, TASK-108 triage 57s); both fresh, actively processing; 0 dropped
 [2026-03-29 18:33:15Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
 [2026-03-29 18:33:15Z] — PIPELINE_STATUS — Ready: 3 (TASK-104, TASK-107, TASK-108), Queue: 2 (assigned, both triage), Open PRs: 0; NOT idle (active pipeline)
+[2026-03-29 19:47:23Z] — UNBLOCK_TASKS — TASK-104 was blocked with workflow runner failure; unblocked to ready for retry; 1 unblocked
+[2026-03-29 19:47:23Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-29 19:47:23Z] — RE_ROUTE_FAILED — No in-progress/review tasks; 0 re-routed
+[2026-03-29 19:47:23Z] — CLEAN_QUEUE — Queue empty; 0 dropped
+[2026-03-29 19:47:23Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
+[2026-03-29 19:47:23Z] — PIPELINE_STATUS — Ready: 3 (TASK-104, TASK-107, TASK-108), Queue: 0, Open PRs: 0; NOT idle (3 ready tasks flowing)
