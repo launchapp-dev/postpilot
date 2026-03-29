@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 10) |
-| Result | FAIL — TASK-050 (bulk actions) merged since run 9 but dashboard still crashes (BUG-016). BUG-015/016/017/007 all still open. TASK-045/046/047/051 all marked done but their branches contain no unique commits — work was never done. ao/task-008 still unmerged (accounts fix exists). Auth + /posts/new + /settings + /campaigns/new PASS. Bulk actions untestable (dashboard crashes). |
+| Date | 2026-03-29 (run 11) |
+| Result | FAIL — No new code merged since run 10. All known bugs persist. TASK-052/053/054 marked done but all have 0 commits ahead of main (same empty-branch pattern, 11th recurrence). New finding: settings table missing from DB — all settings form fields permanently disabled (server action fails silently). Root cause same: pnpm db:push never run. Auth + /posts/new + /settings (loads only) + /campaigns/new PASS. Logout click timed out (flaky). |
 | Steps Passed | 1 of 6 |
-| Duration | ~15 min |
-| Console Errors | buttonVariants server error (BUG-015), SqliteError recycleCount (BUG-016), React DOM prop warning asChild/error (BUG-013) |
-| Network Errors | `/` 500 (BUG-015), /dashboard 500 (BUG-016), /posts 500, /calendar 500, /analytics 500, /campaigns 500 (BUG-017), /api/posts/generate 401 raw JSON exposed to user (BUG-012), /accounts 404 (BUG-007) |
-| New Tasks Created | none — all failures are known bugs. TASK-045/046/047/051 marked done but have no unique commits. ao/task-008 has accounts fix but never merged. |
+| Duration | ~20 min |
+| Console Errors | SqliteError recycleCount (BUG-016), React DOM prop warning asChild/error (BUG-013), POST /settings 500 (settings table missing) |
+| Network Errors | `/` 500 (BUG-015), /dashboard 500 (BUG-016), /posts 500, /calendar 500, /analytics 500, /campaigns 500 (BUG-017), /api/posts/generate 500 (BUG-012), /accounts 404 (BUG-007), POST /settings 500 (settings+brandVoice tables missing from DB) |
+| New Tasks Created | none — all failures are known bugs. TASK-052/053/054 marked done but have zero unique commits. |
 
 ## Test Results History
 
@@ -29,6 +29,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 8) | 1 | 5 | none | No new fixes deployed since run 7. All run 7 bugs persist. AI gen HTTP 500 wrapping Anthropic 401 (run 7 note of "401" was inaccurate — HTTP status has always been 500). TASK-043 marked done but ao/task-008 still not merged to main — /accounts still 404. TASK-045/046/047 still in backlog. |
 | 2026-03-28 (run 9) | 1 | 5 | none | No new fixes deployed since run 8. App state identical to run 8. No new commits to main. Local branches ao/task-008/037/039/041 still unmerged. TASK-045/046/047 remain in backlog. Recurring unmerged-branch pattern continues — TASK-047 created but not actioned. |
 | 2026-03-29 (run 10) | 1 | 5 | none | TASK-050 (bulk actions) merged to main since run 9. All other known bugs persist. TASK-045/046/047/051 all marked done but branches have zero unique commits — no work was actually committed. ao/task-008 has accounts fix (1 unique commit) but still not merged despite 8+ merge tasks. AI gen now shows raw 401 JSON to user. Bulk actions exist in code but untestable (dashboard 500). |
+| 2026-03-29 (run 11) | 1 | 5 | none | No new code merged since run 10. TASK-052/053/054 marked done but all have 0 commits ahead of main (11th recurrence of empty-done-branch pattern). NEW FINDING: settings table missing from DB — settings form fields stay disabled forever (POST /settings → 500 silently fails). Also: settings, brandVoice, campaign tables ALL missing — only account/post/session/user/verification exist in postpilot.db. pnpm db:push has NEVER been run since TASK-031 schema changes. |
 
 ## Known Issues
 
@@ -122,6 +123,12 @@ TASK-035 completed — all five branches merged to main. /settings, /campaigns, 
 
 `pnpm db:push` not run after TASK-014/033 added the `campaign` table to the schema. The campaigns page queries the non-existent `campaign` table. Fix: run `pnpm db:push`.
 
+### BUG-018 — Settings form permanently disabled — settings/brandVoice tables missing from DB [OPEN — run 11]
+
+**Severity:** High (settings page non-functional for all users)
+
+Settings page loads (HTTP 200) but all form fields (`brandName`, `industry`, `website`, `emailAlerts`) stay permanently disabled. Root cause: `getSettings()` and `getBrandVoices()` server actions POST to `/settings` and return 500 because the `settings` and `brandVoice` tables don't exist in `postpilot.db`. The `loading` state starts `true` and `setLoading(false)` is only called in `.then()` — if the Promise rejects silently (no `.catch()`), fields stay disabled forever. The DB only has: account, post, session, user, verification. Missing tables: settings, brandVoice, campaign, plus recycleCount/noRecycle columns on post. Fix: run `pnpm db:push`.
+
 ### BUG-009 — favicon.ico returns 404 [OPEN — minor]
 
 **Severity:** Low
@@ -150,6 +157,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 8) | All routes | same as run 7 | same as run 7 | No new merges to main since run 7 — app state unchanged |
 | 2026-03-28 (run 9) | All routes | same as run 8 | same as run 8 | No new merges to main since run 8 — app state unchanged |
 | 2026-03-29 (run 10) | All routes | same as run 9 | same as run 9 | TASK-050 merged but only adds bulk actions code; dashboard still crashes (BUG-016) — bulk actions untestable |
+| 2026-03-29 (run 11) | Settings form usable | UNVERIFIED (not tested) | FAIL (fields permanently disabled) | settings/brandVoice tables missing from DB — server action silently fails, loading state never resolves |
 
 ## Test Coverage
 
@@ -245,11 +253,11 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 ## Environment Notes
 
 - App URL: http://localhost:3001 (port 3000 occupied by CondoHub, 3002 by another project)
-- Database: SQLite via Drizzle ORM (`postpilot.db`) — **SCHEMA OUT OF DATE** as of run 7: missing recycleCount/noRecycle columns and campaign table — run `pnpm db:push`
+- Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
 - Test credentials: qa-test@postpilot.dev / TestPass123!
 - TASK-050 merged (bulk actions code in /dashboard) — but dashboard still crashes (BUG-016)
-- ao/task-008 has accounts pages (1 commit ahead of main) — never merged despite 8+ merge tasks created
-- TASK-045/046/047/051 all marked done but branches have zero unique commits — no work was actually performed
-- ao/task-037 (old bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop) — all superseded by TASK-050/047/051 but still in local branches only
+- ao/task-008 has accounts pages (1 commit ahead of main) — never merged despite 10+ merge tasks created
+- TASK-045/046/047/051/052/053/054 all marked done but branches have zero unique commits — no work was actually performed
+- ao/task-037 (old bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop) — all superseded but still in local branches only
