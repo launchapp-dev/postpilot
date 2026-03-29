@@ -1,68 +1,45 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const user = sqliteTable("user", {
+export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("emailVerified", { mode: "boolean" }).notNull().default(false),
-  image: text("image"),
-  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+  passwordHash: text("password_hash"),
+  createdAt: int("created_at", { mode: "timestamp" }).notNull(),
 });
 
-export const session = sqliteTable("session", {
+export const socialAccounts = sqliteTable("social_accounts", {
   id: text("id").primaryKey(),
-  expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
-  token: text("token").notNull().unique(),
-  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
-  ipAddress: text("ipAddress"),
-  userAgent: text("userAgent"),
-  userId: text("userId")
+  userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id),
+  platform: text("platform").notNull(),
+  username: text("username").notNull(),
+  accessToken: text("access_token"),
+  status: text("status").notNull().default("active"),
 });
 
-export const account = sqliteTable("account", {
+export const campaigns = sqliteTable("campaigns", {
   id: text("id").primaryKey(),
-  accountId: text("accountId").notNull(),
-  providerId: text("providerId").notNull(),
-  userId: text("userId")
+  userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  accessToken: text("accessToken"),
-  refreshToken: text("refreshToken"),
-  idToken: text("idToken"),
-  accessTokenExpiresAt: integer("accessTokenExpiresAt", { mode: "timestamp" }),
-  refreshTokenExpiresAt: integer("refreshTokenExpiresAt", { mode: "timestamp" }),
-  scope: text("scope"),
-  password: text("password"),
-  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+    .references(() => users.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").notNull().default("draft"),
+  startsAt: int("starts_at", { mode: "timestamp" }),
+  endsAt: int("ends_at", { mode: "timestamp" }),
 });
 
-export const verification = sqliteTable("verification", {
+export const posts = sqliteTable("posts", {
   id: text("id").primaryKey(),
-  identifier: text("identifier").notNull(),
-  value: text("value").notNull(),
-  expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
-  createdAt: integer("createdAt", { mode: "timestamp" }),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }),
-});
-
-export const post = sqliteTable("post", {
-  id: text("id").primaryKey(),
-  userId: text("userId")
+  userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id),
   content: text("content").notNull(),
-  platforms: text("platforms").notNull().default("[]"),
-  status: text("status", { enum: ["draft", "scheduled", "published", "failed"] })
-    .notNull()
-    .default("draft"),
-  scheduledAt: integer("scheduledAt", { mode: "timestamp" }),
-  publishedAt: integer("publishedAt", { mode: "timestamp" }),
-  campaignId: text("campaignId"),
-  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+  platform: text("platform").notNull(),
+  status: text("status").notNull().default("draft"),
+  scheduledAt: int("scheduled_at", { mode: "timestamp" }),
+  publishedAt: int("published_at", { mode: "timestamp" }),
+  campaignId: text("campaign_id").references(() => campaigns.id),
 });

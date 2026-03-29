@@ -1,16 +1,10 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const sessionToken =
-    request.cookies.get("better-auth.session_token") ||
-    request.cookies.get("__Secure-better-auth.session_token");
+export async function proxy(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request);
 
-  const protectedPaths = ["/dashboard", "/posts", "/calendar", "/analytics", "/accounts", "/campaigns", "/settings"];
-  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
-
-  if (isProtected && !sessionToken) {
+  if (!sessionCookie) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -18,5 +12,13 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/posts/:path*", "/calendar/:path*", "/analytics/:path*", "/accounts/:path*", "/campaigns/:path*", "/settings/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/posts/:path*",
+    "/accounts/:path*",
+    "/campaigns/:path*",
+    "/calendar/:path*",
+    "/analytics/:path*",
+    "/settings/:path*",
+  ],
 };
