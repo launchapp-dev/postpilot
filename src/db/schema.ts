@@ -66,6 +66,22 @@ export const settings = sqliteTable("settings", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
+export const campaign = sqliteTable("campaign", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  brief: text("brief").notNull(),
+  status: text("status", { enum: ["active", "paused", "completed"] })
+    .notNull()
+    .default("active"),
+  startDate: integer("startDate", { mode: "timestamp" }),
+  endDate: integer("endDate", { mode: "timestamp" }),
+  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+});
+
 export const post = sqliteTable("post", {
   id: text("id").primaryKey(),
   userId: text("userId")
@@ -81,7 +97,7 @@ export const post = sqliteTable("post", {
   prompt: text("prompt"),
   publishAttempts: integer("publishAttempts").notNull().default(0),
   nextRetryAt: integer("nextRetryAt", { mode: "timestamp" }),
-  campaignId: text("campaignId"),
+  campaignId: text("campaignId").references(() => campaign.id, { onDelete: "set null" }),
   recycleCount: integer("recycleCount").notNull().default(0),
   lastRecycledAt: integer("lastRecycledAt", { mode: "timestamp" }),
   noRecycle: integer("noRecycle", { mode: "boolean" }).notNull().default(false),
