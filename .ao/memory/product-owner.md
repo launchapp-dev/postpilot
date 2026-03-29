@@ -252,3 +252,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Create next cycle if TASK-102/104 are genuinely done (verify via git log + ls + schema.ts grep before trusting done status).
 
 [2026-03-29] — PIPELINE STATUS (run 31) — 2 open tasks: TASK-102 [critical/enqueued], TASK-104 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 32) — READ-ONLY phase. Node v16 in env prevents pnpm run. Prior build confirmed passing (14 routes). button.tsx still present (git log: only 63cd453, no deletion commit). src/app/accounts/ still missing (ls confirmed). post-list.tsx confirmed: only text search + status tab filters, no platform/campaign dropdowns.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 32) — TASK-106 (button.tsx delete) cancelled; TASK-105 (accounts pages) ghost-done: src/app/accounts/ still does not exist, no socialAccount in schema.ts. Only 1 open task at run start: TASK-104 [ready/high] (accounts, also ghost-done).
+
+[2026-03-29] — CREATED TASK-107 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done/cancelled 26 TIMES: TASK-046 through TASK-106. 4-check verification checklist in description.
+
+[2026-03-29] — CREATED TASK-108 [medium/feature, ready, NOT enqueued] — Add platform and campaign filters to post dashboard. VISION.md requires filter by platform, campaign, date range. post-list.tsx only has text search + status tabs. No prior task for this feature is open (TASK-052/054 ghost-done). Not enqueued (medium priority — planner will pick up).
+
+[2026-03-29] — PIPELINE STATUS (run 32) — 3 open tasks: TASK-104 [ready/high], TASK-107 [critical/enqueued], TASK-108 [ready/medium]. HEALTHY. 2-task creation limit reached.
