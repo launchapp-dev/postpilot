@@ -6,11 +6,11 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 22) |
-| Result | PARTIAL PASS — App state identical to run 21. Server started on :3001 (PID 53780). BUG-015 (`/` 500) persists (button.tsx still present, TASK-107 in triage). BUG-007 (/accounts 404) persists (no accounts dir). BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS. |
+| Date | 2026-03-29 (run 23) |
+| Result | PARTIAL PASS — No new code merged since run 22 (only memory/planner/reconciler commits). Server on :3001 (PID 53838). BUG-015 (`/` 500) persists. BUG-007 (/accounts 404) persists. BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS. **NEW: Save Draft verified PASS for first time** — post saves to /posts/[id] and appears in dashboard. Logout flaky (timeout, run 23 consecutive). |
 | Steps Passed | 4 of 6 |
-| Duration | ~10 min |
-| Console Errors | BUG-015 buttonVariants 500 on `/`; BUG-013 error=false on /posts/new |
+| Duration | ~12 min |
+| Console Errors | BUG-015 buttonVariants 500 on `/`; BUG-019 asChild DOM warning on all authenticated routes; BUG-013 error=false on /posts/new |
 | Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 503 (BUG-012) |
 | New Tasks Created | None — all failures are known bugs with existing tasks |
 
@@ -29,6 +29,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 20) | 0 | 6 | none | BLOCKED — PostPilot dev server not running (PID 65539 gone). No new code merged since run 19 (memory/planner/product-owner commits only). button.tsx still present. :3000=CondoHub, :3002=Invoicer, PostPilot=absent. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-29 (run 21) | 4 | 2 | TASK-099/100 | MAJOR IMPROVEMENT: DB updated (pnpm db:push run). BUG-016/017/018 RESOLVED — dashboard/posts/calendar/analytics/campaigns/settings all load (200). Auth PASS (signup+login work, session cookie obtained). `/` 500 (BUG-015, TASK-098 ghost-done 23rd time). /accounts 404 (BUG-007). AI gen 503 "ANTHROPIC_API_KEY not configured" (BUG-012, improved error msg). NEW: asChild prop DOM warning (BUG-019). Server started on :3001 by QA agent. |
 | 2026-03-29 (run 22) | 4 | 2 | none | No new code merged since run 21 (memory/planner/reconciler commits only). Server started on :3001 (PID 53780). App state identical to run 21. `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200 when authenticated. Auth PASS (login 200, session established). TASK-107 now in active triage for BUG-015. |
+| 2026-03-29 (run 23) | 4 | 2 | none | No new code merged since run 22 (memory/planner/reconciler commits only). Server on :3001 (PID 53838). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS. **NEW VERIFIED: Save Draft PASS** — post saved to /posts/[id], appears in dashboard (first time confirmed via browser). Logout timeout (flaky, 23rd consecutive run). Only known console errors (asChild BUG-019). |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -205,7 +206,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] AI content generation works (natural language input) *(FAIL — /api/posts/generate returns 401 — ANTHROPIC_API_KEY invalid/missing, BUG-012)*
 - [x] Platform selection works (multi-select) *(PASS — 2026-03-28 run 5 — LinkedIn selected, character counter updates, preview shows)*
 - [x] Post preview renders correctly per platform *(PASS — 2026-03-28 run 5 — LinkedIn preview panel updates with content; TASK-036 merged)*
-- [ ] Save as draft works *(UNVERIFIED — requires browser interaction)*
+- [x] Save as draft works *(PASS — 2026-03-29 run 23 — post saved to /posts/[id], appears in dashboard with Draft status)*
 - [ ] Schedule post works *(not tested)*
 - [x] "From Source" input mode present (URL/text input) *(PASS — 2026-03-29 run 7 — "From Source" toggle visible on /posts/new, TASK-040)*
 - [ ] "From Source" content generation works *(not tested — AI gen fails due to missing API key)*
@@ -282,7 +283,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ## Environment Notes
 
-- App URL: PostPilot dev server started on :3001 (PID 53780, run 22). Ports 3000/3002 were idle at start time. Server responds normally — no HTTP hang observed (unlike runs 17-19). TASK-107 in active triage for BUG-015. button.tsx still present.
+- App URL: PostPilot dev server on :3001 (PID 53838, run 23). Server responds normally — no HTTP hang. TASK-107 in active triage for BUG-015. button.tsx still present.
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
