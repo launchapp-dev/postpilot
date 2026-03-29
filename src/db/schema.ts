@@ -50,6 +50,22 @@ export const verification = sqliteTable("verification", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }),
 });
 
+export const campaign = sqliteTable("campaign", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  brief: text("brief").notNull(),
+  status: text("status", { enum: ["active", "paused", "completed"] })
+    .notNull()
+    .default("active"),
+  startDate: integer("startDate", { mode: "timestamp" }),
+  endDate: integer("endDate", { mode: "timestamp" }),
+  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+});
+
 export const post = sqliteTable("post", {
   id: text("id").primaryKey(),
   userId: text("userId")
@@ -62,7 +78,7 @@ export const post = sqliteTable("post", {
     .default("draft"),
   scheduledAt: integer("scheduledAt", { mode: "timestamp" }),
   publishedAt: integer("publishedAt", { mode: "timestamp" }),
-  campaignId: text("campaignId"),
+  campaignId: text("campaignId").references(() => campaign.id, { onDelete: "set null" }),
   createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
