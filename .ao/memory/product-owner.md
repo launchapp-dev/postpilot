@@ -210,3 +210,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Create next cycle if TASK-092/093 are genuinely done.
 
 [2026-03-29] — PIPELINE STATUS (run 27) — 2 open tasks: TASK-092 [critical/enqueued], TASK-093 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 28) — READ-ONLY phase. Prior build confirmed passing (14 routes). button.tsx still present (ls: button.ts + button.tsx both in src/components/ui/). src/app/accounts/ still missing. socialAccount table not in schema.ts (grep: 0 matches).
+
+[2026-03-29] — GHOST-DONE PATTERN (run 28) — No new ghost-done this run. TASK-092 [critical/ready] and TASK-093 [high/ready/assigned] are open and correctly reflect the two chronic issues. TASK-092 was NOT in queue — enqueued it to triage. TASK-093 was already assigned in queue.
+
+[2026-03-29] — NO NEW TASKS CREATED (run 28) — TASK-092/093 already exist and cover the top 2 priorities (button.tsx delete + accounts pages). Creating more would be duplicates. 2-task limit also applies.
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2 open tasks already cover top priorities. Create next cycle if TASK-092/093 are genuinely done (verify via git log + ls + schema.ts grep before trusting done status).
+
+[2026-03-29] — PIPELINE STATUS (run 28) — 2 open tasks: TASK-092 [critical/enqueued], TASK-093 [high/enqueued:assigned]. HEALTHY. Requirements: 0.
