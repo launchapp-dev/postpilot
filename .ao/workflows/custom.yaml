@@ -53,6 +53,22 @@ agents:
       git add .ao/memory/product-owner.md && git commit -m "memory: product-owner run log" && git push origin main
 
       ═══════════════════════════════════════════════════════════
+      GSTACK SKILLS — USE THESE FOR PLANNING
+      ═══════════════════════════════════════════════════════════
+      gstack is installed at .claude/skills/gstack/. Use these slash
+      commands during your product review:
+
+      WHEN EVALUATING WHAT TO BUILD NEXT (Step 5):
+        Run /autoplan — analyzes the codebase and generates a
+        prioritized plan of what to build. Cross-reference its output
+        with VISION.md to validate your task creation decisions.
+
+      WHEN THE PRODUCT NEEDS STRATEGIC DIRECTION:
+        Run /office-hours — product strategy session. Use when the
+        pipeline is idle and you need to decide what features move
+        the needle most.
+
+      ═══════════════════════════════════════════════════════════
       PRODUCT VISION
       ═══════════════════════════════════════════════════════════
       Read VISION.md every run — it is the source of truth for what to build.
@@ -308,13 +324,23 @@ agents:
       shadcn registry (installed to @/components/ui/).
 
       ═══════════════════════════════════════════════════════════
-      GSTACK INTEGRATION
+      GSTACK SKILLS — USE THESE AT SPECIFIC STEPS
       ═══════════════════════════════════════════════════════════
-      This project uses gstack skills for enhanced development workflow.
-      When available, leverage these gstack commands:
-      - /design-consultation — before building new UI, get design system guidance
-      - /review — after implementation, self-review your code for quality
-      - /careful — when touching auth, publishing, or scheduling logic
+      gstack is installed at .claude/skills/gstack/. Use these slash
+      commands at the right moment:
+
+      BEFORE building UI (Step 3):
+        Run /design-consultation — get component recommendations and
+        layout guidance from the design system before writing any JSX.
+
+      BEFORE touching auth, scheduling, or publishing logic (Step 3):
+        Run /careful — enables extra safety checks for destructive or
+        sensitive code paths.
+
+      AFTER implementation, BEFORE commit (between Step 3 and Step 4):
+        Run /review — self-review your own code for quality, bugs,
+        missing edge cases, and design system compliance. Fix any
+        issues it finds before proceeding to build.
 
       STEP 0 — PREPARATION:
         a) Read the task via ao.task.get.
@@ -381,13 +407,25 @@ agents:
       Commit: git add .ao/memory/reviewer.md && git commit -m "memory: reviewer run log" && git push origin main
 
       ═══════════════════════════════════════════════════════════
-      GSTACK INTEGRATION
+      GSTACK SKILLS — USE THESE DURING REVIEW
       ═══════════════════════════════════════════════════════════
-      This project uses gstack for enhanced review capabilities.
-      When available, leverage:
-      - /review — comprehensive code review with auto-fix suggestions
-      - /cso — security audit for auth, API, and data handling code
-      - /design-review — validate UI changes against design system
+      gstack is installed at .claude/skills/gstack/. Use these slash
+      commands during your review:
+
+      FOR EVERY PR (Deep Review step):
+        Run /review — comprehensive code review that checks quality,
+        correctness, and suggests auto-fixes. Use its output to
+        inform your APPROVE or CHANGES_REQUESTED verdict.
+
+      FOR PRs touching auth, API routes, or data handling:
+        Run /cso — security audit (OWASP + STRIDE). Check for
+        hardcoded secrets, injection, XSS, broken auth. If /cso
+        finds critical issues, REQUEST CHANGES.
+
+      FOR PRs with UI changes:
+        Run /design-review — validates component usage against the
+        design system. Catches custom UI that should use
+        @/components/ui/ instead.
 
       FAST-PATH AUTO-MERGE:
         - Dependencies-only PR (package.json + lockfile only) -> MERGE.
@@ -482,12 +520,21 @@ agents:
       Commit: git add .ao/memory/qa-tester.md && git commit -m "memory: qa-tester run log" && git push origin main
 
       ═══════════════════════════════════════════════════════════
-      GSTACK INTEGRATION
+      GSTACK SKILLS — USE THESE FOR TESTING
       ═══════════════════════════════════════════════════════════
-      This project uses gstack for enhanced QA capabilities.
-      When available, leverage:
-      - /qa — full browser QA testing with real Chromium
-      - /browse — persistent browser for testing complex flows
+      gstack is installed at .claude/skills/gstack/. Use these slash
+      commands during your test runs:
+
+      FOR FULL E2E TEST SUITE (Step 1-6):
+        Run /qa — performs comprehensive browser QA testing with real
+        Chromium. It navigates pages, interacts with elements, checks
+        state, takes screenshots, and captures bug evidence. Use this
+        INSTEAD of manual Playwright calls for the main test suite.
+
+      FOR COMPLEX MULTI-STEP FLOWS (auth, post creation, campaigns):
+        Run /browse — persistent headless browser session. Use for
+        testing flows that require maintaining login state, cookies,
+        and multi-page navigation without cold-starting each time.
 
       ═══════════════════════════════════════════════════════════
       STEP 0 — READ & UPDATE TEST PLAN (mandatory, always first)
@@ -749,7 +796,8 @@ phases:
     mode: agent
     agent: reviewer
     directive: |
-      Review the PR. Check CI status first.
+      Review the PR using gstack /review for code quality, /cso for security
+      (on auth/API PRs), and /design-review for UI PRs.
       If no blocking issues: leave an APPROVED review via gh pr review --approve.
       If blocking issues: leave a CHANGES_REQUESTED review via gh pr review --request-changes.
       Do NOT merge the PR yourself — the verify-pr phase handles merging.
