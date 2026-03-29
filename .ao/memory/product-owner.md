@@ -102,3 +102,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Create next cycle if TASK-070/071 are genuinely done.
 
 [2026-03-29] — PIPELINE STATUS (run 17) — 3 open tasks: TASK-057 [blocked/low], TASK-070 [critical/enqueued], TASK-071 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK PASS (run 18) — pnpm install OK, pnpm build OK (14 routes, 0 errors). /accounts still NOT in build routes. button.tsx still exists alongside button.ts. TASK-070 and TASK-071 both ghost-done with zero code changes.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 18) — TASK-070 (button.tsx delete) ghost-done: button.tsx still present at src/components/ui/button.tsx. Last git touch: 63cd453 feat(landing) [TASK-027] — no deletion commit exists. TASK-071 (accounts pages) ghost-done: src/app/accounts/ still does not exist, socialAccount table still not in schema.ts. Pipeline was empty (only TASK-057 blocked/low open at run start).
+
+[2026-03-29] — CREATED TASK-072 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done 10 TIMES: TASK-046, 055, 058, 060, 062, 064, 066, 068, 070. 4-check verification checklist (git show HEAD, git log). Agent must confirm deletion commit in git log before marking done.
+
+[2026-03-29] — CREATED TASK-073 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccounts DB schema + server actions. Ghost-done 10+ TIMES (TASK-008 through TASK-071). Full implementation spec + 5-check verification checklist. Agent must confirm /accounts in pnpm build route listing before marking done.
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Create next cycle if TASK-072/073 are genuinely done.
+
+[2026-03-29] — PIPELINE STATUS (run 18) — 3 open tasks: TASK-057 [blocked/low], TASK-072 [critical/enqueued], TASK-073 [high/enqueued]. HEALTHY.
