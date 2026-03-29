@@ -150,3 +150,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Note: post-list.tsx currently only filters by text search + status. VISION.md requires platform, campaign, and date range filters. Create this as TASK-082 next cycle if TASK-080/081 are genuinely done.
 
 [2026-03-29] — PIPELINE STATUS (run 22) — 2 open tasks: TASK-080 [critical/enqueued], TASK-081 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 23) — READ-ONLY phase. Prior build confirmed passing (14 routes). button.tsx still present (confirmed via ls). src/app/accounts/ still missing (confirmed via ls).
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 23) — TASK-080 (button.tsx delete) ghost-done: button.tsx still present at src/components/ui/button.tsx. Last git touch: 63cd453 (TASK-027). TASK-081 (accounts pages) ghost-done: src/app/accounts/ still does not exist, socialAccount table not in schema.ts. Pipeline was empty (0 open tasks at run start).
+
+[2026-03-29] — CREATED TASK-083 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done 15 TIMES: TASK-046, 055, 058, 060, 062, 064, 066, 068, 070, 072, 074, 076, 078, 080. 4-check verification checklist in description. Note: system auto-assigned TASK-083 (expected TASK-082).
+
+[2026-03-29] — CREATED TASK-084 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccount DB schema + server actions. Ghost-done 15+ TIMES. Full implementation spec + 5-check verification checklist.
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Create next cycle if TASK-083/084 are genuinely done.
+
+[2026-03-29] — PIPELINE STATUS (run 23) — 2 open tasks: TASK-083 [critical/enqueued], TASK-084 [high/enqueued]. HEALTHY.
