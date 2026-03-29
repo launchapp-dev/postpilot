@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-28 (run 9) |
-| Result | FAIL — No new fixes deployed since run 8. All run 7/8 bugs still open: Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics 500 (BUG-016); /campaigns 500 (BUG-017); /accounts 404 (BUG-007); /settings + /posts/new + auth PASS |
+| Date | 2026-03-29 (run 10) |
+| Result | FAIL — TASK-050 (bulk actions) merged since run 9 but dashboard still crashes (BUG-016). BUG-015/016/017/007 all still open. TASK-045/046/047/051 all marked done but their branches contain no unique commits — work was never done. ao/task-008 still unmerged (accounts fix exists). Auth + /posts/new + /settings + /campaigns/new PASS. Bulk actions untestable (dashboard crashes). |
 | Steps Passed | 1 of 6 |
-| Duration | ~10 min |
-| Console Errors | SqliteError recycleCount (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
-| Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 500 (Anthropic 401 invalid x-api-key), /accounts 404 |
-| New Tasks Created | none — all failures are known bugs. TASK-045/046/047 still in backlog. Local branches ao/task-008/037/039/041 unmerged (TASK-047 open) |
+| Duration | ~15 min |
+| Console Errors | buttonVariants server error (BUG-015), SqliteError recycleCount (BUG-016), React DOM prop warning asChild/error (BUG-013) |
+| Network Errors | `/` 500 (BUG-015), /dashboard 500 (BUG-016), /posts 500, /calendar 500, /analytics 500, /campaigns 500 (BUG-017), /api/posts/generate 401 raw JSON exposed to user (BUG-012), /accounts 404 (BUG-007) |
+| New Tasks Created | none — all failures are known bugs. TASK-045/046/047/051 marked done but have no unique commits. ao/task-008 has accounts fix but never merged. |
 
 ## Test Results History
 
@@ -28,6 +28,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 7) | 1 | 5 | TASK-045, TASK-046, TASK-047 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
 | 2026-03-29 (run 8) | 1 | 5 | none | No new fixes deployed since run 7. All run 7 bugs persist. AI gen HTTP 500 wrapping Anthropic 401 (run 7 note of "401" was inaccurate — HTTP status has always been 500). TASK-043 marked done but ao/task-008 still not merged to main — /accounts still 404. TASK-045/046/047 still in backlog. |
 | 2026-03-28 (run 9) | 1 | 5 | none | No new fixes deployed since run 8. App state identical to run 8. No new commits to main. Local branches ao/task-008/037/039/041 still unmerged. TASK-045/046/047 remain in backlog. Recurring unmerged-branch pattern continues — TASK-047 created but not actioned. |
+| 2026-03-29 (run 10) | 1 | 5 | none | TASK-050 (bulk actions) merged to main since run 9. All other known bugs persist. TASK-045/046/047/051 all marked done but branches have zero unique commits — no work was actually committed. ao/task-008 has accounts fix (1 unique commit) but still not merged despite 8+ merge tasks. AI gen now shows raw 401 JSON to user. Bulk actions exist in code but untestable (dashboard 500). |
 
 ## Known Issues
 
@@ -148,6 +149,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 7) | /analytics | 404 (run 6) | 500 (run 7) | TASK-015 merged analytics code, recycleCount column missing — BUG-016 |
 | 2026-03-29 (run 8) | All routes | same as run 7 | same as run 7 | No new merges to main since run 7 — app state unchanged |
 | 2026-03-28 (run 9) | All routes | same as run 8 | same as run 8 | No new merges to main since run 8 — app state unchanged |
+| 2026-03-29 (run 10) | All routes | same as run 9 | same as run 9 | TASK-050 merged but only adds bulk actions code; dashboard still crashes (BUG-016) — bulk actions untestable |
 
 ## Test Coverage
 
@@ -209,11 +211,11 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] Evergreen post identification works *(not tested — blocked by BUG-016)*
 - [ ] Exclude-from-recycling flag works *(not tested — blocked by BUG-016)*
 
-### Bulk Actions (ao/task-037 — unmerged)
-- [ ] Select multiple posts with checkboxes *(not tested — TASK-037 done but in local branch, not on main)*
-- [ ] Bulk reschedule works *(not tested)*
-- [ ] Bulk delete works *(not tested)*
-- [ ] Bulk duplicate works *(not tested)*
+### Bulk Actions (TASK-050 merged to main)
+- [ ] Select multiple posts with checkboxes *(BLOCKED — dashboard crashes before rendering, BUG-016)*
+- [ ] Bulk reschedule works *(BLOCKED — dashboard crashes before rendering, BUG-016)*
+- [ ] Bulk delete works *(BLOCKED — dashboard crashes before rendering, BUG-016)*
+- [ ] Bulk duplicate works *(BLOCKED — dashboard crashes before rendering, BUG-016)*
 
 ### Engagement Prediction (ao/task-039 — unmerged)
 - [ ] Engagement score shown on /posts/new before publish *(not tested — TASK-039 done but in local branch, not on main)*
@@ -247,4 +249,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
 - Test credentials: qa-test@postpilot.dev / TestPass123!
-- Unmerged branches: ao/task-008 (social accounts), ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop) — all done locally, none pushed to origin or merged to main as of run 9
+- TASK-050 merged (bulk actions code in /dashboard) — but dashboard still crashes (BUG-016)
+- ao/task-008 has accounts pages (1 commit ahead of main) — never merged despite 8+ merge tasks created
+- TASK-045/046/047/051 all marked done but branches have zero unique commits — no work was actually performed
+- ao/task-037 (old bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop) — all superseded by TASK-050/047/051 but still in local branches only
