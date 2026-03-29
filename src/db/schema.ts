@@ -82,6 +82,23 @@ export const campaign = sqliteTable("campaign", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
+export const brandVoice = sqliteTable("brandVoice", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  tone: text("tone", { enum: ["professional", "casual", "witty", "authoritative"] })
+    .notNull()
+    .default("professional"),
+  vocabulary: text("vocabulary"),
+  topicsToAvoid: text("topicsToAvoid"),
+  referenceContent: text("referenceContent"),
+  isDefault: integer("isDefault", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+});
+
 export const post = sqliteTable("post", {
   id: text("id").primaryKey(),
   userId: text("userId")
