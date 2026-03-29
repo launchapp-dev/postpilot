@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +35,10 @@ const TONES = [
 
 export default function NewPostPage() {
   const router = useRouter();
+  const [inputMode, setInputMode] = useState<"prompt" | "source">("prompt");
   const [prompt, setPrompt] = useState("");
+  const [sourceType, setSourceType] = useState<"url" | "text">("url");
+  const [sourceValue, setSourceValue] = useState("");
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [tone, setTone] = useState("professional");
   const [content, setContent] = useState("");
@@ -50,15 +54,27 @@ export default function NewPostPage() {
     );
   }
 
+  const canGenerate = selectedPlatforms.length > 0 &&
+    (inputMode === "prompt" ? !!prompt.trim() : !!sourceValue.trim());
+
   async function handleGenerate() {
-    if (!prompt.trim() || selectedPlatforms.length === 0) return;
+    if (!canGenerate) return;
     setIsGenerating(true);
     setGenerateError("");
     try {
+      const body: Record<string, unknown> = {
+        platforms: selectedPlatforms,
+        tone,
+      };
+      if (inputMode === "prompt") {
+        body.prompt = prompt;
+      } else {
+        body.sourceContent = { type: sourceType, value: sourceValue };
+      }
       const res = await fetch("/api/posts/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, platforms: selectedPlatforms, tone }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Generation failed");
@@ -116,16 +132,90 @@ export default function NewPostPage() {
                   <CardTitle className="text-base">Generate with AI</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="prompt">What do you want to post about?</Label>
-                    <Textarea
-                      id="prompt"
-                      placeholder="e.g. Write a LinkedIn post about our new feature launch that improves team collaboration"
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      className="min-h-[100px]"
-                    />
+                  <div className="flex gap-1 rounded-md border border-border bg-muted/40 p-1">
+                    <button
+                      onClick={() => setInputMode("prompt")}
+                      className={`flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors ${
+                        inputMode === "prompt"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      Prompt
+                    </button>
+                    <button
+                      onClick={() => setInputMode("source")}
+                      className={`flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors ${
+                        inputMode === "source"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      From Source
+                    </button>
                   </div>
+
+                  {inputMode === "prompt" ? (
+                    <div className="space-y-2">
+                      <Label htmlFor="prompt">What do you want to post about?</Label>
+                      <Textarea
+                        id="prompt"
+                        placeholder="e.g. Write a LinkedIn post about our new feature launch that improves team collaboration"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex gap-1 text-sm">
+                        <button
+                          onClick={() => setSourceType("url")}
+                          className={`rounded px-2.5 py-1 transition-colors ${
+                            sourceType === "url"
+                              ? "bg-primary text-primary-foreground"
+                              : "border border-border bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          }`}
+                        >
+                          URL
+                        </button>
+                        <button
+                          onClick={() => setSourceType("text")}
+                          className={`rounded px-2.5 py-1 transition-colors ${
+                            sourceType === "text"
+                              ? "bg-primary text-primary-foreground"
+                              : "border border-border bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          }`}
+                        >
+                          Paste text
+                        </button>
+                      </div>
+
+                      {sourceType === "url" ? (
+                        <div className="space-y-2">
+                          <Label htmlFor="source-url">Blog post, changelog, or press release URL</Label>
+                          <Input
+                            id="source-url"
+                            type="url"
+                            placeholder="https://example.com/blog/post"
+                            value={sourceValue}
+                            onChange={(e) => setSourceValue(e.target.value)}
+                          />
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <Label htmlFor="source-text">Paste your content</Label>
+                          <Textarea
+                            id="source-text"
+                            placeholder="Paste a blog post, changelog entry, press release, or product description…"
+                            value={sourceValue}
+                            onChange={(e) => setSourceValue(e.target.value)}
+                            className="min-h-[120px]"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label>Brand voice</Label>
@@ -149,7 +239,7 @@ export default function NewPostPage() {
 
                   <Button
                     onClick={handleGenerate}
-                    disabled={!prompt.trim() || selectedPlatforms.length === 0 || isGenerating}
+                    disabled={!canGenerate || isGenerating}
                     className="w-full"
                   >
                     <Sparkles className="mr-2 h-4 w-4" />
