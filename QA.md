@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 19) |
-| Result | FAIL — Same state as runs 17-18. PostPilot PID 65539 on :3001 still hanging. No new code merged. TASK-086/088/090 ghost-done (21st attempt). TASK-091 also ghost-done (accounts pages). button.tsx still present. 0/6 tests runnable. |
+| Date | 2026-03-29 (run 20) |
+| Result | BLOCKED — PostPilot dev server not running (PID 65539 gone). No new code merged since run 19. button.tsx still present. Environment: :3000=CondoHub (PID 96743), :3002=Invoicer (PID 29494). 0/6 tests runnable. |
 | Steps Passed | 0 of 6 |
 | Duration | ~5 min |
-| Console Errors | BUG-015: buttonVariants() from server component (same log entry, server started 00:02:36) |
-| Network Errors | All HTTP requests to :3001 timeout (curl --max-time 8 returns 000/exit 28) |
-| New Tasks Created | none — all failures are known bugs (BUG-015 root cause, ghost-done pattern persists) |
+| Console Errors | N/A — server not running |
+| Network Errors | Connection refused on all PostPilot ports |
+| New Tasks Created | none — all failures are known bugs, server is an ops issue |
 
 ## Test Results History
 
@@ -26,6 +26,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 17) | 0 | 6 | none | FAIL — PostPilot dev server running on :3001 (PID 65539). Server started, hit BUG-015 buttonVariants() crash at 00:02:36 per dev log, then stopped responding to all HTTP requests. TCP connections accepted but hang indefinitely. No new code merged since run 16 (only memory/planner commits). All known bugs persist. |
 | 2026-03-29 (run 18) | 0 | 6 | none | FAIL — Same PID 65539 on :3001, same HTTP hang. No new code merged since run 17 (memory/planner/reconciler/product-owner commits only). TASK-082/083 ghost-done: button.tsx still exists. TASK-086 is 18th attempt. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-29 (run 19) | 0 | 6 | none | FAIL — Same PID 65539 on :3001, same HTTP hang. No new code merged since run 18 (memory/planner/product-owner commits only). TASK-086/088/090 all ghost-done (21st attempt total to delete button.tsx). TASK-091 ghost-done for accounts pages (0 unique commits). button.tsx still present. All known bugs persist (BUG-007/012/015/016/017/018). |
+| 2026-03-29 (run 20) | 0 | 6 | none | BLOCKED — PostPilot dev server not running (PID 65539 gone). No new code merged since run 19 (memory/planner/product-owner commits only). button.tsx still present. :3000=CondoHub, :3002=Invoicer, PostPilot=absent. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -175,6 +176,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 17) | App reachable | BLOCKED (run 16) | FAIL (hanging) | PostPilot dev server back on :3001. Server starts but hangs after BUG-015 buttonVariants() crash — accepts TCP but stops processing HTTP. |
 | 2026-03-29 (run 18) | App reachable | FAIL (run 17) | FAIL (hanging) | Same PID 65539 still running on :3001, still hanging. No changes to codebase since run 17. TASK-082/083 ghost-done. |
 | 2026-03-29 (run 19) | App reachable | FAIL (run 18) | FAIL (hanging) | Same PID 65539 on :3001, still hanging. No changes to codebase. TASK-086/088/090 ghost-done (21st+ attempt). TASK-091 ghost-done for accounts. |
+| 2026-03-29 (run 20) | App reachable | FAIL (run 19) | BLOCKED (not running) | PostPilot dev server (PID 65539) no longer exists. Environment: :3000=CondoHub, :3002=Invoicer. PostPilot completely absent from process list. No code changes since run 19. |
 
 ## Test Coverage
 
@@ -269,7 +271,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ## Environment Notes
 
-- App URL: http://localhost:3001 (run 19 confirmed) — PostPilot dev server running on :3001 (PID 65539, same process since run 17). Port 3000 = CondoHub (PID 11630), port 3002 = Invoicer (PID 14364). Server hangs after BUG-015 crash — all HTTP requests timeout (curl exit 28). Dev log shows last error at 00:02:36 (BUG-015). TASK-086/088/090 are attempts 19-21 to delete button.tsx — all ghost-done. TASK-091 also ghost-done for accounts pages.
+- App URL: PostPilot dev server NOT running (run 20). PID 65539 no longer exists. Port 3000 = CondoHub (PID 96743), port 3002 = Invoicer (PID 29494). PostPilot completely absent from process list. Run when server is started. TASK-086/088/090/091 all ghost-done (21+ attempts). button.tsx still present.
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
