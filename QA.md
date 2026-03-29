@@ -6,8 +6,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 28) |
-| Result | PARTIAL PASS — No new code merged to main since run 27 (only memory/planner commits). Server on :3001 (PID 53893). BUG-015 (`/` 500) persists — TASK-107 has REAL fix commit (e16651d) deleting button.tsx, not yet merged. BUG-007 (/accounts 404) persists. BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS (browser login → /dashboard). Save Draft PASS (post /posts/nx1phhzpjqbmncdr54a created, appeared in dashboard). Logout timeout (flaky, 28th consecutive). |
+| Date | 2026-03-29 (run 29) |
+| Result | PARTIAL PASS — No new code merged to main since run 28 (only memory/planner commits). New server started on :3001 (node v22, fresh). BUG-015 (`/` HTTP 500) persists — TASK-107 (ready) has fix commit but not merged. BUG-007 (/accounts 404) persists. BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS (browser authenticated → /dashboard). Save Draft PASS (post /posts/tj63tzksovhmncejxrr created). Logout timeout (flaky, 29th consecutive). |
 | Steps Passed | 4 of 6 |
 | Duration | ~10 min |
 | Console Errors | BUG-019 asChild DOM warning on all auth routes; BUG-013 error=false on /posts/new |
@@ -35,6 +35,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 26) | 4 | 2 | none | No new code merged since run 25 (only memory/planner commits). Server on :3001 (PID 53838). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other 10 routes 200 when authenticated. Auth PASS (POST /api/auth/sign-in/email 200, session token obtained). No new bugs found. |
 | 2026-03-29 (run 27) | 4 | 2 | none | No new code merged since run 26 (only memory/planner/reconciler commits). Server on :3001 (PID 53893). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (login → /dashboard). Save Draft PASS (post created, appeared in dashboard). Logout timeout (flaky, 26th+ consecutive). No new bugs found. |
 | 2026-03-29 (run 28) | 4 | 2 | none | No new code merged to main since run 27 (only memory/planner commits). Server on :3001 (PID 53893). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (browser login → /dashboard). Save Draft PASS (post /posts/nx1phhzpjqbmncdr54a created, appeared in dashboard). Logout timeout (flaky, 28th consecutive). KEY: TASK-107 has real fix commit e16651d for BUG-015, not yet merged. |
+| 2026-03-29 (run 29) | 4 | 2 | none | No new code merged to main since run 28 (only memory/planner commits). New server started on :3001 (node v22). `/` HTTP 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (browser session active). Save Draft PASS (post /posts/tj63tzksovhmncejxrr created). Logout timeout (flaky, 29th consecutive). TASK-107 still in "ready" status — fix not merged. |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -288,7 +289,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ## Environment Notes
 
-- App URL: PostPilot dev server on :3001 (PID 53893, run 28). Server responds normally. TASK-107 has real fix commit e16651d (deletes button.tsx) in remotes/origin/ao/task-107 — not yet merged to main.
+- App URL: PostPilot dev server on :3001 (run 29, node v22, fresh start). Server responds normally. TASK-107 (ready) has real fix commit e16651d (deletes button.tsx) in remotes/origin/ao/task-107 — not yet merged to main after 29 runs.
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
