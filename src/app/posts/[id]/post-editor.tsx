@@ -10,8 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sidebar } from "@/components/layout/sidebar";
-import { updatePost, deletePost } from "@/app/posts/actions";
-import { ArrowLeft, Save, Trash2, Sparkles, Clock } from "lucide-react";
+import { updatePost, deletePost, recyclePost } from "@/app/posts/actions";
+import { ArrowLeft, Save, Trash2, Sparkles, Clock, RefreshCw } from "lucide-react";
 
 type PostStatus = "draft" | "scheduled" | "published" | "failed";
 
@@ -23,6 +23,9 @@ interface Post {
   scheduledAt: Date | null;
   publishedAt: Date | null;
   prompt: string | null;
+  recycleCount: number;
+  noRecycle: boolean;
+  lastRecycledAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -57,6 +60,8 @@ export function PostEditor({ post }: { post: Post }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [regenError, setRegenError] = useState("");
+  const [isRecycling, setIsRecycling] = useState(false);
+  const [recycleError, setRecycleError] = useState("");
 
   const platforms = parsePlatforms(post.platforms);
 
@@ -82,6 +87,21 @@ export function PostEditor({ post }: { post: Post }) {
     if (!confirm("Delete this post?")) return;
     setIsDeleting(true);
     await deletePost(post.id);
+  }
+
+  async function handleRecycle() {
+    setIsRecycling(true);
+    setRecycleError("");
+    try {
+      const result = await recyclePost(post.id);
+      if (!result.success) {
+        setRecycleError(result.error);
+      } else {
+        router.push(`/posts/${result.newPostId}`);
+      }
+    } finally {
+      setIsRecycling(false);
+    }
   }
 
   async function handleRegenerate() {
@@ -182,6 +202,10 @@ export function PostEditor({ post }: { post: Post }) {
                 <p className="text-sm text-destructive">{regenError}</p>
               )}
 
+              {recycleError && (
+                <p className="text-sm text-destructive">{recycleError}</p>
+              )}
+
               <div className="flex flex-wrap gap-3 pt-2">
                 <Button
                   onClick={handleSave}
@@ -199,6 +223,17 @@ export function PostEditor({ post }: { post: Post }) {
                   >
                     <Sparkles className="mr-2 h-4 w-4" />
                     {isRegenerating ? "Regenerating…" : "Regenerate"}
+                  </Button>
+                )}
+
+                {post.status === "published" && !post.noRecycle && post.recycleCount < 3 && (
+                  <Button
+                    variant="outline"
+                    onClick={handleRecycle}
+                    disabled={isRecycling}
+                  >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    {isRecycling ? "Recycling…" : "Recycle"}
                   </Button>
                 )}
 

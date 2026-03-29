@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { post } from "@/db/schema";
 import { PLATFORM_DAILY_LIMIT, calcNextRetryAt } from "@/lib/scheduling";
-import { generatePost } from "@/lib/ai";
+import { generatePost, rephrasePost } from "@/lib/ai";
 import { startOfDay, endOfDay } from "date-fns";
 
 export async function generatePostContentAction(
@@ -148,6 +148,60 @@ export async function schedulePost(
     .where(and(eq(post.id, postId), eq(post.userId, userId)));
 
   return { success: true };
+}
+
+export async function recyclePost(
+  originalPostId: string
+): Promise<{ success: false; error: string } | { success: true; newPostId: string }> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return { success: false, error: "Unauthenticated" };
+
+  const userId = session.user.id;
+  const original = await db.query.post.findFirst({
+    where: and(eq(post.id, originalPostId), eq(post.userId, userId)),
+  });
+
+  if (!original) return { success: false, error: "Post not found" };
+  if (original.status !== "published") return { success: false, error: "Only published posts can be recycled" };
+  if (original.noRecycle) return { success: false, error: "This post has recycling disabled" };
+  if (original.recycleCount >= 3) return { success: false, error: "Post has reached the maximum recycle limit" };
+
+  if (original.lastRecycledAt) {
+    const daysSince = (Date.now() - original.lastRecycledAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSince < 30) return { success: false, error: "Must wait 30 days between recycles" };
+  }
+
+  let platforms: string[] = [];
+  try { platforms = JSON.parse(original.platforms); } catch { platforms = []; }
+
+  const rephrasedContent = await rephrasePost(original.content, platforms);
+
+  const newId = generateId();
+  const now = new Date();
+
+  await db.insert(post).values({
+    id: newId,
+    userId,
+    content: rephrasedContent,
+    platforms: original.platforms,
+    status: "draft",
+    scheduledAt: null,
+    prompt: original.prompt,
+    recycledFromId: originalPostId,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  await db
+    .update(post)
+    .set({
+      recycleCount: original.recycleCount + 1,
+      lastRecycledAt: now,
+      updatedAt: now,
+    })
+    .where(eq(post.id, originalPostId));
+
+  return { success: true, newPostId: newId };
 }
 
 export async function publishDuePosts(): Promise<{ published: number; retried: number; failed: number }> {

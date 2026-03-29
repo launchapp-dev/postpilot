@@ -66,6 +66,10 @@ export const post = sqliteTable("post", {
   publishAttempts: integer("publishAttempts").notNull().default(0),
   nextRetryAt: integer("nextRetryAt", { mode: "timestamp" }),
   campaignId: text("campaignId"),
+  recycleCount: integer("recycleCount").notNull().default(0),
+  lastRecycledAt: integer("lastRecycledAt", { mode: "timestamp" }),
+  noRecycle: integer("noRecycle", { mode: "boolean" }).notNull().default(false),
+  recycledFromId: text("recycledFromId"),
   createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });

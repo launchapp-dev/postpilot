@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { startOfWeek, endOfWeek } from "date-fns";
-import { eq, and, gte, lte } from "drizzle-orm";
+import { startOfWeek, endOfWeek, subDays } from "date-fns";
+import { eq, and, gte, lte, lt } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { post } from "@/db/schema";
@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/layout/sidebar";
 import { PostList } from "@/components/posts/post-list";
+import { RecycleSuggestions } from "@/components/posts/recycle-suggestions";
 import { CalendarDays, Send, FileText, AlertCircle } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -21,7 +22,9 @@ export default async function DashboardPage() {
 
   const userId = session.user.id;
 
-  const [allPosts, weekPosts, scheduledPosts, publishedPosts, draftPosts] = await Promise.all([
+  const thirtyDaysAgo = subDays(new Date(), 30);
+
+  const [allPosts, weekPosts, scheduledPosts, publishedPosts, draftPosts, recyclablePosts] = await Promise.all([
     db.query.post.findMany({
       where: eq(post.userId, userId),
       orderBy: (p, { desc }) => [desc(p.createdAt)],
@@ -41,6 +44,17 @@ export default async function DashboardPage() {
     }),
     db.query.post.findMany({
       where: and(eq(post.userId, userId), eq(post.status, "draft")),
+    }),
+    db.query.post.findMany({
+      where: and(
+        eq(post.userId, userId),
+        eq(post.status, "published"),
+        lt(post.recycleCount, 3),
+        eq(post.noRecycle, false),
+        lte(post.publishedAt, thirtyDaysAgo)
+      ),
+      orderBy: (p, { desc }) => [desc(p.publishedAt)],
+      limit: 3,
     }),
   ]);
 
@@ -94,6 +108,8 @@ export default async function DashboardPage() {
             <h2 className="mb-4 text-lg font-semibold">All Posts</h2>
             <PostList posts={allPosts} />
           </div>
+
+          <RecycleSuggestions posts={recyclablePosts} />
         </div>
       </main>
     </div>
