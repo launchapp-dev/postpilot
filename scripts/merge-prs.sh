@@ -19,7 +19,7 @@ git fetch origin main --quiet 2>/dev/null || true
 while IFS=$'\t' read -r pr_num title mergeable; do
   task_num=$(echo "$title" | grep -oE '[0-9]+' | head -1)
   [ -z "$task_num" ] && continue
-  task_id=$(printf 'TASK-%03d' "$task_num")
+  task_id=$(printf 'TASK-%03d' "$((10#$task_num))")
 
   already_queued=$(ao --project-root "$PROJECT_ROOT" queue list --json 2>/dev/null | grep -c "$task_id" || true)
   if [ "$already_queued" -gt 0 ]; then
