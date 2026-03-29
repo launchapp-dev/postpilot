@@ -9,10 +9,25 @@ export const PLATFORM_LIMITS: Record<string, number> = {
   threads: 500,
 };
 
+export type VoiceContext = {
+  vocabulary?: string;
+  topicsToAvoid?: string;
+  referenceContent?: string;
+};
+
 export async function generatePost(
   prompt: string,
   platforms: string[],
   tone: string
+): Promise<string> {
+  return generatePostWithVoice(prompt, platforms, tone);
+}
+
+export async function generatePostWithVoice(
+  prompt: string,
+  platforms: string[],
+  tone: string,
+  voice?: VoiceContext
 ): Promise<string> {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new Error("ANTHROPIC_API_KEY is not configured");
@@ -20,6 +35,20 @@ export async function generatePost(
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const platformList = platforms.join(", ");
+
+  const voiceInstructions: string[] = [];
+  if (voice?.vocabulary) voiceInstructions.push(`Use these keywords/phrases: ${voice.vocabulary}`);
+  if (voice?.topicsToAvoid) voiceInstructions.push(`Avoid these topics: ${voice.topicsToAvoid}`);
+  if (voice?.referenceContent) voiceInstructions.push(`Reference content style:\n${voice.referenceContent}`);
+
+  const userContent = [
+    `Write a social media post for: ${platformList}`,
+    `Tone: ${tone}`,
+    ...voiceInstructions,
+    `Request: ${prompt}`,
+    "",
+    "Return only the post content.",
+  ].join("\n");
 
   const message = await client.messages.create({
     model: "claude-opus-4-6",
@@ -29,7 +58,7 @@ export async function generatePost(
     messages: [
       {
         role: "user",
-        content: `Write a social media post for: ${platformList}\nTone: ${tone}\nRequest: ${prompt}\n\nReturn only the post content.`,
+        content: userContent,
       },
     ],
   });
