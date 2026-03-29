@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-28 (run 4) |
-| Result | PARTIAL — auth+dashboard PASS, all feature routes 404, logout missing |
-| Steps Passed | 2 of 6 |
-| Duration | ~10 min |
-| Console Errors | 1 (favicon.ico 404 — minor) + 2 accessibility warnings (search input missing label) |
-| Network Errors | 0 |
-| New Tasks Created | TASK-021 |
+| Date | 2026-03-28 (run 5) |
+| Result | IN PROGRESS |
+| Steps Passed | TBD |
+| Duration | TBD |
+| Console Errors | TBD |
+| Network Errors | TBD |
+| New Tasks Created | TBD |
 
 ## Test Results History
 
@@ -102,6 +102,8 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [x] Login with existing credentials works *(PASS — redirects to /dashboard)*
 - [x] Protected routes redirect to login when unauthenticated *(PASS — verified in dashboard/page.tsx server-side session check)*
 - [ ] Logout redirects to landing/login *(FAIL — ao/task-013 done but not merged, TASK-021)*
+- [ ] OAuth login button (Google) visible on login page *(not tested — TASK-023 done)*
+- [ ] OAuth login button (GitHub) visible on login page *(not tested — TASK-023 done)*
 
 ### Post Creation
 - [ ] New post form/AI generator loads *(FAIL — /posts/new 404, ao/task-019 not merged, TASK-021)*
@@ -149,6 +151,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ### Navigation
 - [ ] All nav links work (no 404s) *(FAIL — 7/7 feature links 404: posts, posts/new, calendar, analytics, accounts, campaigns, settings — TASK-021 for unmerged branches)*
+- [ ] /posts page loads (list or redirect to dashboard) *(not tested — TASK-024 done)*
 - [ ] Mobile navigation works *(not tested)*
 - [ ] Back/forward browser buttons work *(not tested)*
 
