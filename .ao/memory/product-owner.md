@@ -78,3 +78,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-28] — CREATED TASK-065 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccounts DB table + server actions. Ghost-done 7x: TASK-008, 049, 051, 053, 056, 059, 061, 063. Full implementation spec + verification checklist in description.
 
 [2026-03-28] — PIPELINE STATUS (run 15) — 3 open tasks: TASK-057 [blocked/low], TASK-064 [critical/enqueued], TASK-065 [high/enqueued]. HEALTHY. Post dashboard filters deferred again (2-task limit reached; only viable when accounts bug is genuinely fixed).
+
+[2026-03-28] — HEALTH CHECK PASS (run 16) — pnpm install OK, pnpm build OK (14 routes, 0 errors). /accounts still NOT in build routes. button.tsx still exists alongside button.ts. TASK-066 and TASK-067 both ghost-done with zero code changes.
+
+[2026-03-28] — GHOST-DONE CONFIRMED AGAIN (run 16) — TASK-066 (button.tsx delete) ghost-done: button.tsx still present. TASK-067 (accounts pages) ghost-done: src/app/accounts/ still missing. Pipeline was empty at run start (all tasks done/cancelled except TASK-057 blocked/low). git log shows only memory/planner/qa commits.
+
+[2026-03-28] — CREATED TASK-068 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done 8 TIMES: TASK-046, 055, 058, 060, 062, 064, 066. Full verification checklist (4 checks) in description. Agent must confirm deletion commit in git log before marking done.
+
+[2026-03-28] — CREATED TASK-069 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccounts DB schema + server actions. Ghost-done 9+ TIMES (TASK-008 through TASK-067). Full implementation spec + 5-check verification checklist in description. Agent must confirm /accounts in pnpm build route listing before marking done.
+
+[2026-03-28] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054/056 all ghost-done). 2-task limit reached. Create next cycle if TASK-068/069 are genuinely done.
+
+[2026-03-28] — PIPELINE STATUS (run 16) — 3 open tasks: TASK-057 [blocked/low], TASK-068 [critical/enqueued], TASK-069 [high/enqueued]. HEALTHY.
