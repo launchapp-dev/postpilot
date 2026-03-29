@@ -114,3 +114,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Create next cycle if TASK-072/073 are genuinely done.
 
 [2026-03-29] — PIPELINE STATUS (run 18) — 3 open tasks: TASK-057 [blocked/low], TASK-072 [critical/enqueued], TASK-073 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 19) — READ-ONLY phase, cannot run pnpm build. Prior run confirmed build passes (14 routes). Code inspection confirms: button.tsx still present, src/app/accounts/ still missing.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 19) — TASK-072 (button.tsx delete) ghost-done: button.tsx still present at src/components/ui/button.tsx. TASK-073 (accounts pages) ghost-done: src/app/accounts/ still does not exist, socialAccount table still not in schema.ts. git log shows only memory/planner/qa commits. Pipeline was empty (only TASK-057 blocked/low open at run start).
+
+[2026-03-29] — CREATED TASK-074 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done 11 TIMES: TASK-046, 055, 058, 060, 062, 064, 066, 068, 070, 072. 4-check verification checklist in description.
+
+[2026-03-29] — CREATED TASK-075 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccounts DB schema + server actions. Ghost-done 11+ TIMES (TASK-008 through TASK-073). Full implementation spec + 5-check verification checklist. Agent must confirm /accounts in pnpm build route listing before marking done.
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Create next cycle if TASK-074/075 are genuinely done.
+
+[2026-03-29] — PIPELINE STATUS (run 19) — 3 open tasks: TASK-057 [blocked/low], TASK-074 [critical/enqueued], TASK-075 [high/enqueued]. HEALTHY.
