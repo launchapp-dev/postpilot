@@ -16,13 +16,13 @@ mcp_servers:
     args: ["-y", "@modelcontextprotocol/server-sequential-thinking"]
   github:
     command: npx
-    args: ["-y", "@modelcontextprotocol/server-github"]
+    args: ["-y", "gh-cli-mcp"]
   package-version:
     command: npx
     args: ["-y", "mcp-package-version"]
   playwright:
     command: npx
-    args: ["-y", "@playwright/mcp@latest"]
+    args: ["-y", "@playwright/record-mcp@latest", "--record", "--record-format", "webm", "--output-dir", ".ao/recordings"]
 
 agents:
   default:
