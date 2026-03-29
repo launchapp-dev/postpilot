@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 6) |
-| Result | PARTIAL — BUG-011 FIXED (dashboard/posts/calendar now load); auth+logout+OAuth PASS; AI gen 500 (BUG-012, unmerged fix); accounts/campaigns/analytics/settings 404 (unmerged branches) |
-| Steps Passed | 4 of 6 |
-| Duration | ~15 min |
-| Console Errors | favicon 404 (BUG-009), React prop warning on /posts/new (BUG-013) — no new errors |
-| Network Errors | /api/posts/generate 500, /accounts 404, /campaigns 404, /analytics 404, /settings 404 |
-| New Tasks Created | TASK-035 |
+| Date | 2026-03-29 (run 7) |
+| Result | FAIL — Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics/campaigns 500 (BUG-016/017 — pnpm db:push needed after TASK-031/034); /accounts 404 (BUG-007); /settings + /posts/new PASS; auth PASS |
+| Steps Passed | 1 of 6 |
+| Duration | ~10 min |
+| Console Errors | RecycleCount SqliteError (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
+| Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 401 (API key invalid/missing), /accounts 404 |
+| New Tasks Created | TASK-043, TASK-044 |
 
 ## Test Results History
 
@@ -25,6 +25,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-28 (run 4) | 2 | 4 | TASK-021 | Auth+dashboard PASS. All feature routes still 404. TASK-013/019/020 done but branches unmerged — TASK-021 created. New: 2 accessibility warnings on dashboard search input. |
 | 2026-03-28 (run 5) | 3 | 3 | TASK-028, TASK-029 | TASK-021/022/023/024 merged. Logout+OAuth+/posts/new now PASS. REGRESSION: dashboard/posts/calendar crash (SqliteError: no such column "prompt" — pnpm db:push not run after TASK-022 merge). AI gen 500. Accounts/campaigns/analytics/settings still 404. |
 | 2026-03-29 (run 6) | 4 | 2 | TASK-035 | BUG-011 RESOLVED: pnpm db:push run (TASK-028 done), dashboard/posts/calendar all PASS. Recurring unmerged-branches: TASK-009/014/015/027/029 done in worktrees but not on main — TASK-035 created. AI gen still 500 (no ANTHROPIC_API_KEY). Accounts 404 (TASK-008 still ready). |
+| 2026-03-29 (run 7) | 1 | 5 | TASK-043, TASK-044 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
 
 ## Known Issues
 
@@ -94,18 +95,29 @@ POST `/api/posts/generate` returns 500. Likely cause: `ANTHROPIC_API_KEY` not se
 
 Console warning: `Received 'false' for a non-boolean attribute 'error'`. A form component on /posts/new passes `error={false}` instead of `error={undefined}`. Cosmetic/console noise only.
 
-### BUG-014 — CRITICAL: Recurring unmerged branches — TASK-009/014/015/027/029 done but not on main [OPEN — TASK-035]
+### BUG-014 — CRITICAL: Recurring unmerged branches — TASK-009/014/015/027/029 done but not on main [RESOLVED — 2026-03-29 run 7]
 
-**Severity:** Critical (blocks 4 routes + AI gen fix + landing page)
+**Severity:** Resolved
 
-Fifth recurrence of the unmerged-branches pattern. Five tasks "done" in local worktrees but not merged to main:
-- `ao/task-009` → /settings still 404
-- `ao/task-014` → /campaigns still 404
-- `ao/task-015` → /analytics still 404
-- `ao/task-027` → landing page still a stub
-- `ao/task-029` → AI gen fix (lazy Anthropic init) not on main
+TASK-035 completed — all five branches merged to main. /settings, /campaigns, /analytics, landing page all reachable (though some now crash for other reasons). Pattern continues: TASK-037/039/041 now done in local worktrees but not on main.
 
-Fix: TASK-035 created — merge all five branches into main.
+### BUG-015 — CRITICAL: Landing page `/` returns 500 — buttonVariants() called from server component [OPEN — 2026-03-29 run 7]
+
+**Severity:** Critical (landing page broken for all unauthenticated visitors)
+
+`src/app/page.tsx` (server component) calls `buttonVariants()` from `@/components/ui/button`. The `button.tsx` file has `"use client"` at line 1, marking all its exports as client-only. Next.js 15 throws: `"Attempted to call buttonVariants() from the server but buttonVariants is on the client."` Root cause: naming collision between `button.ts` (barrel, no "use client") and `button.tsx` (has "use client") — Turbopack resolves to `.tsx`.
+
+### BUG-016 — CRITICAL: Dashboard/posts/calendar/analytics crash with SqliteError: no such column "recycleCount" [OPEN — 2026-03-29 run 7]
+
+**Severity:** Critical (dashboard + 3 routes broken)
+
+`pnpm db:push` not run after TASK-031 (content recycling) added `recycleCount` and `noRecycle` columns to the `post` table schema. Drizzle queries that reference these columns fail with `SqliteError: no such column: "recycleCount"`. Affects: /dashboard, /posts, /calendar, /analytics. Same recurring pattern as BUG-011. Fix: run `pnpm db:push`.
+
+### BUG-017 — CRITICAL: /campaigns crashes with SqliteError: no such table: campaign [OPEN — 2026-03-29 run 7]
+
+**Severity:** Critical (campaigns route broken)
+
+`pnpm db:push` not run after TASK-014/033 added the `campaign` table to the schema. The campaigns page queries the non-existent `campaign` table. Fix: run `pnpm db:push`.
 
 ### BUG-009 — favicon.ico returns 404 [OPEN — minor]
 
@@ -128,32 +140,40 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-28 (run 4) | Steps passed | 2 (run 3) | 2 (run 4) | Done tasks (TASK-013/019/020) not merged to main — recurring unmerged-branch pattern |
 | 2026-03-28 (run 5) | Dashboard loads | PASS (run 4) | FAIL (run 5) | TASK-022 merged schema changes without running pnpm db:push — SqliteError crash (BUG-011) |
 | 2026-03-29 (run 6) | Dashboard loads | FAIL (run 5) | PASS (run 6) | pnpm db:push run (TASK-028) — BUG-011 resolved, postpilot.db has all schema columns |
+| 2026-03-29 (run 7) | Landing page `/` | PASS (run 6) | FAIL (run 7) | TASK-038 updated button.tsx with "use client", Turbopack resolves import to client module — BUG-015 |
+| 2026-03-29 (run 7) | Dashboard loads | PASS (run 6) | FAIL (run 7) | TASK-031 added recycleCount/noRecycle columns without running pnpm db:push — BUG-016 |
+| 2026-03-29 (run 7) | /campaigns | 404 (run 6) | 500 (run 7) | TASK-035 merged campaign code, pnpm db:push not run — campaign table missing — BUG-017 |
+| 2026-03-29 (run 7) | /analytics | 404 (run 6) | 500 (run 7) | TASK-015 merged analytics code, recycleCount column missing — BUG-016 |
 
 ## Test Coverage
 
 ### Auth Flow
-- [x] Landing page loads without errors *(PASS — 2026-03-28 run 2)*
+- [ ] Landing page loads without errors *(FAIL — 2026-03-29 run 7 — 500, BUG-015)*
 - [x] Signup with email/password works *(PASS — redirects to /dashboard with welcome message)*
 - [x] Login with existing credentials works *(PASS — redirects to /dashboard)*
-- [x] Protected routes redirect to login when unauthenticated *(PASS — verified in dashboard/page.tsx server-side session check)*
+- [x] Protected routes redirect to login when unauthenticated *(PASS — all authenticated routes return 307)*
 - [x] Logout redirects to landing/login *(PASS — 2026-03-28 run 5 — Sign out button in sidebar redirects to /login)*
 - [x] OAuth login button (Google) visible on login page *(PASS — 2026-03-28 run 5 — "Continue with Google" button present)*
 - [x] OAuth login button (GitHub) visible on login page *(PASS — 2026-03-28 run 5 — "Continue with GitHub" button present)*
 
 ### Post Creation
-- [x] New post form/AI generator loads *(PASS — 2026-03-28 run 5 — renders with prompt input, platform selector, preview panel)*
-- [ ] AI content generation works (natural language input) *(FAIL — /api/posts/generate returns 500, BUG-012, TASK-029)*
+- [x] New post form/AI generator loads *(PASS — 2026-03-29 run 7 — renders with Prompt | From Source toggle, platform selector, preview panel)*
+- [ ] AI content generation works (natural language input) *(FAIL — /api/posts/generate returns 401 — ANTHROPIC_API_KEY invalid/missing, BUG-012)*
 - [x] Platform selection works (multi-select) *(PASS — 2026-03-28 run 5 — LinkedIn selected, character counter updates, preview shows)*
-- [x] Post preview renders correctly per platform *(PASS — 2026-03-28 run 5 — LinkedIn preview panel updates with content)*
-- [ ] Save as draft works *(UNVERIFIED — BUG-011 fixed, DB schema correct, server action exists; requires browser to test form submission)*
+- [x] Post preview renders correctly per platform *(PASS — 2026-03-28 run 5 — LinkedIn preview panel updates with content; TASK-036 merged)*
+- [ ] Save as draft works *(UNVERIFIED — requires browser interaction)*
 - [ ] Schedule post works *(not tested)*
+- [x] "From Source" input mode present (URL/text input) *(PASS — 2026-03-29 run 7 — "From Source" toggle visible on /posts/new, TASK-040)*
+- [ ] "From Source" content generation works *(not tested — AI gen fails due to missing API key)*
+- [ ] AI engagement prediction score shown before publishing *(UNVERIFIED — TASK-039 in unmerged branch ao/task-039)*
 
 ### Post Dashboard
-- [x] Dashboard loads with post list *(PASS — 2026-03-29 run 6 — renders with draft/scheduled posts, New Post button, Search posts input)*
-- [ ] Search works *(not tested — UI present but requires browser interaction)*
+- [ ] Dashboard loads with post list *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
+- [ ] Search works *(not tested)*
 - [ ] Status filter works *(not tested)*
 - [ ] Platform filter works *(not tested)*
 - [ ] Quick stats show correct counts *(not tested)*
+- [ ] Bulk actions work (reschedule, delete, duplicate) *(UNVERIFIED — TASK-037 in unmerged branch ao/task-037)*
 
 ### Social Accounts
 - [ ] Accounts page loads *(FAIL — /accounts 404, TASK-008 ready)*
@@ -162,44 +182,48 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] Disconnect account works *(not tested)*
 
 ### Campaigns
-- [ ] Campaign list page loads *(FAIL — /campaigns 404, TASK-014 created)*
+- [ ] Campaign list page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-017, campaign table missing)*
+- [x] /campaigns/new loads *(PASS — 2026-03-29 run 7 — returns 200)*
 - [ ] Create campaign from AI brief works *(not tested)*
 - [ ] Campaign detail shows timeline and posts *(not tested)*
 - [ ] Pause/resume campaign works *(not tested)*
 
 ### Content Calendar
-- [x] Calendar view loads *(PASS — 2026-03-29 run 6 — renders with week/month views, March dates visible)*
-- [ ] Posts appear on correct dates *(not tested — blocked by BUG-011)*
+- [ ] Calendar view loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
+- [ ] Posts appear on correct dates *(not tested)*
 - [ ] Day/week/month views work *(not tested)*
-- [ ] Drag-and-drop rescheduling works *(not tested)*
+- [ ] Drag-and-drop rescheduling works *(UNVERIFIED — TASK-041 in unmerged branch ao/task-041)*
 
 ### Analytics
-- [ ] Analytics page loads *(FAIL — /analytics 404, TASK-015 created)*
+- [ ] Analytics page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
 - [ ] Per-platform metrics display *(not tested)*
 - [ ] Date range filtering works *(not tested)*
 - [ ] Charts render correctly *(not tested)*
 
 ### Settings
-- [ ] Settings page loads *(FAIL — /settings 404, TASK-009 ready)*
-- [ ] Brand voice configuration saves *(not tested)*
+- [x] Settings page loads *(PASS — 2026-03-29 run 7 — /settings returns 200, brand voice content visible)*
+- [x] Multi-voice brand voice configuration present *(PASS — 2026-03-29 run 7 — voice-related content rendered, TASK-038)*
+- [ ] Brand voice configuration saves *(not tested — requires browser interaction)*
 - [ ] Business profile updates work *(not tested)*
 
 ### Navigation
-- [ ] All nav links work (no 404s) *(FAIL — 2026-03-29 run 6 — /accounts/campaigns/analytics/settings 404 (BUG-014, TASK-035))*
-- [x] /posts page loads (list or redirect to dashboard) *(PASS — 2026-03-29 run 6 — renders post list with search, draft/scheduled posts)*
+- [ ] All nav links work (no 404s/500s) *(FAIL — 2026-03-29 run 7 — /accounts 404 (BUG-007); /dashboard/posts/calendar/campaigns/analytics 500 (BUG-016/017))*
+- [ ] /posts page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016)*
+- [ ] /settings page loads *(PASS — 2026-03-29 run 7)*
 - [ ] Mobile navigation works *(not tested)*
 - [ ] Back/forward browser buttons work *(not tested)*
 
 ### Console & Network
-- [ ] No console.error messages *(FAIL — favicon 404 (BUG-009); React prop warning on /posts/new (BUG-013))*
-- [ ] No accessibility warnings *(not retested — /dashboard inaccessible due to BUG-011)*
-- [x] No uncaught exceptions *(PASS — errors are caught and shown as UI messages)*
-- [ ] No failed network requests (4xx/5xx) *(FAIL — /api/posts/generate 500 (BUG-012), /accounts 404 (BUG-007), /campaigns 404 (BUG-014), /analytics 404 (BUG-014), /settings 404 (BUG-014))*
+- [ ] No console.error messages *(FAIL — favicon 404 (BUG-009); React prop warning on /posts/new (BUG-013); SqliteError on multiple routes (BUG-016/017))*
+- [ ] No accessibility warnings *(not tested — blocked by 500 errors)*
+- [x] No uncaught exceptions *(PASS — errors are caught by Next.js error boundary)*
+- [ ] No failed network requests (4xx/5xx) *(FAIL — `/` 500 (BUG-015), /dashboard 500 (BUG-016), /api/posts/generate 401 (BUG-012), /accounts 404 (BUG-007), multiple others 500)*
 
 ## Environment Notes
 
 - App URL: http://localhost:3001 (port 3000 occupied by CondoHub, 3002 by another project)
-- Database: SQLite via Drizzle ORM (`postpilot.db`) — run `pnpm db:push` before testing; schema up-to-date as of run 6
+- Database: SQLite via Drizzle ORM (`postpilot.db`) — **SCHEMA OUT OF DATE** as of run 7: missing recycleCount/noRecycle columns and campaign table — run `pnpm db:push`
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
-- AI generation: requires ANTHROPIC_API_KEY in .env.local (currently missing — no .env.local file)
+- AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns 401)
 - Test credentials: qa-test@postpilot.dev / TestPass123!
+- Unmerged branches: ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop)
