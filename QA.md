@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 20) |
-| Result | BLOCKED — PostPilot dev server not running (PID 65539 gone). No new code merged since run 19. button.tsx still present. Environment: :3000=CondoHub (PID 96743), :3002=Invoicer (PID 29494). 0/6 tests runnable. |
-| Steps Passed | 0 of 6 |
-| Duration | ~5 min |
-| Console Errors | N/A — server not running |
-| Network Errors | Connection refused on all PostPilot ports |
-| New Tasks Created | none — all failures are known bugs, server is an ops issue |
+| Date | 2026-03-29 (run 22) |
+| Result | PARTIAL PASS — App state identical to run 21. Server started on :3001 (PID 53780). BUG-015 (`/` 500) persists (button.tsx still present, TASK-107 in triage). BUG-007 (/accounts 404) persists (no accounts dir). BUG-012 (AI gen 503) persists. All other routes 200. Auth PASS. |
+| Steps Passed | 4 of 6 |
+| Duration | ~10 min |
+| Console Errors | BUG-015 buttonVariants 500 on `/`; BUG-013 error=false on /posts/new |
+| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 503 (BUG-012) |
+| New Tasks Created | None — all failures are known bugs with existing tasks |
 
 ## Test Results History
 
@@ -27,6 +27,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 18) | 0 | 6 | none | FAIL — Same PID 65539 on :3001, same HTTP hang. No new code merged since run 17 (memory/planner/reconciler/product-owner commits only). TASK-082/083 ghost-done: button.tsx still exists. TASK-086 is 18th attempt. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-29 (run 19) | 0 | 6 | none | FAIL — Same PID 65539 on :3001, same HTTP hang. No new code merged since run 18 (memory/planner/product-owner commits only). TASK-086/088/090 all ghost-done (21st attempt total to delete button.tsx). TASK-091 ghost-done for accounts pages (0 unique commits). button.tsx still present. All known bugs persist (BUG-007/012/015/016/017/018). |
 | 2026-03-29 (run 20) | 0 | 6 | none | BLOCKED — PostPilot dev server not running (PID 65539 gone). No new code merged since run 19 (memory/planner/product-owner commits only). button.tsx still present. :3000=CondoHub, :3002=Invoicer, PostPilot=absent. All known bugs persist (BUG-007/012/015/016/017/018). |
+| 2026-03-29 (run 21) | 4 | 2 | TASK-099/100 | MAJOR IMPROVEMENT: DB updated (pnpm db:push run). BUG-016/017/018 RESOLVED — dashboard/posts/calendar/analytics/campaigns/settings all load (200). Auth PASS (signup+login work, session cookie obtained). `/` 500 (BUG-015, TASK-098 ghost-done 23rd time). /accounts 404 (BUG-007). AI gen 503 "ANTHROPIC_API_KEY not configured" (BUG-012, improved error msg). NEW: asChild prop DOM warning (BUG-019). Server started on :3001 by QA agent. |
+| 2026-03-29 (run 22) | 4 | 2 | none | No new code merged since run 21 (memory/planner/reconciler commits only). Server started on :3001 (PID 53780). App state identical to run 21. `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200 when authenticated. Auth PASS (login 200, session established). TASK-107 now in active triage for BUG-015. |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -121,23 +123,29 @@ TASK-035 completed — all five branches merged to main. /settings, /campaigns, 
 
 `src/app/page.tsx` (server component) calls `buttonVariants()` from `@/components/ui/button`. The `button.tsx` file has `"use client"` at line 1, marking all its exports as client-only. Next.js 15 throws: `"Attempted to call buttonVariants() from the server but buttonVariants is on the client."` Root cause: naming collision between `button.ts` (barrel, no "use client") and `button.tsx` (has "use client") — Turbopack resolves to `.tsx`.
 
-### BUG-016 — CRITICAL: Dashboard/posts/calendar/analytics crash with SqliteError: no such column "recycleCount" [OPEN — 2026-03-29 run 7]
+### BUG-016 — CRITICAL: Dashboard/posts/calendar/analytics crash with SqliteError: no such column "recycleCount" [RESOLVED — 2026-03-29 run 21]
 
-**Severity:** Critical (dashboard + 3 routes broken)
+**Severity:** Resolved
 
-`pnpm db:push` not run after TASK-031 (content recycling) added `recycleCount` and `noRecycle` columns to the `post` table schema. Drizzle queries that reference these columns fail with `SqliteError: no such column: "recycleCount"`. Affects: /dashboard, /posts, /calendar, /analytics. Same recurring pattern as BUG-011. Fix: run `pnpm db:push`.
+`pnpm db:push` was run. DB now has recycleCount/noRecycle/lastRecycledAt/recycledFromId columns on the post table. Dashboard/posts/calendar/analytics all return 200.
 
-### BUG-017 — CRITICAL: /campaigns crashes with SqliteError: no such table: campaign [OPEN — 2026-03-29 run 7]
+### BUG-017 — CRITICAL: /campaigns crashes with SqliteError: no such table: campaign [RESOLVED — 2026-03-29 run 21]
 
-**Severity:** Critical (campaigns route broken)
+**Severity:** Resolved
 
-`pnpm db:push` not run after TASK-014/033 added the `campaign` table to the schema. The campaigns page queries the non-existent `campaign` table. Fix: run `pnpm db:push`.
+`pnpm db:push` was run. DB now has campaign table. /campaigns returns 200.
 
-### BUG-018 — Settings form permanently disabled — settings/brandVoice tables missing from DB [OPEN — run 11]
+### BUG-018 — Settings form permanently disabled — settings/brandVoice tables missing from DB [RESOLVED — 2026-03-29 run 21]
 
-**Severity:** High (settings page non-functional for all users)
+**Severity:** Resolved
 
-Settings page loads (HTTP 200) but all form fields (`brandName`, `industry`, `website`, `emailAlerts`) stay permanently disabled. Root cause: `getSettings()` and `getBrandVoices()` server actions POST to `/settings` and return 500 because the `settings` and `brandVoice` tables don't exist in `postpilot.db`. The `loading` state starts `true` and `setLoading(false)` is only called in `.then()` — if the Promise rejects silently (no `.catch()`), fields stay disabled forever. The DB only has: account, post, session, user, verification. Missing tables: settings, brandVoice, campaign, plus recycleCount/noRecycle columns on post. Fix: run `pnpm db:push`.
+`pnpm db:push` was run. DB now has settings and brandVoice tables. Settings POST returns 200. Form fields no longer permanently disabled.
+
+### BUG-019 — React `asChild` prop DOM warning on dashboard/campaigns/calendar [OPEN — run 21]
+
+**Severity:** Low (console noise, no functional impact)
+
+Console warning: `React does not recognize the 'asChild' prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase 'aschild' instead.` Appears when rendering /dashboard, /campaigns, /calendar routes. Caused by a Radix UI component passing `asChild` to a native DOM element instead of a Radix primitive. Fix: find the component forwarding `asChild` to a plain HTML tag and remove or correct it.
 
 ### BUG-009 — favicon.ico returns 404 [OPEN — minor]
 
@@ -177,6 +185,9 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 18) | App reachable | FAIL (run 17) | FAIL (hanging) | Same PID 65539 still running on :3001, still hanging. No changes to codebase since run 17. TASK-082/083 ghost-done. |
 | 2026-03-29 (run 19) | App reachable | FAIL (run 18) | FAIL (hanging) | Same PID 65539 on :3001, still hanging. No changes to codebase. TASK-086/088/090 ghost-done (21st+ attempt). TASK-091 ghost-done for accounts. |
 | 2026-03-29 (run 20) | App reachable | FAIL (run 19) | BLOCKED (not running) | PostPilot dev server (PID 65539) no longer exists. Environment: :3000=CondoHub, :3002=Invoicer. PostPilot completely absent from process list. No code changes since run 19. |
+| 2026-03-29 (run 21) | BUG-016 dashboard 500 | FAIL (runs 7-20) | PASS | pnpm db:push run — DB now has recycleCount/noRecycle columns + campaign/settings/brandVoice tables. BUG-016/017/018 all resolved. |
+| 2026-03-29 (run 21) | BUG-017 campaigns 500 | FAIL (runs 7-20) | PASS | Same db:push fix — campaign table now exists. /campaigns returns 200. |
+| 2026-03-29 (run 21) | BUG-018 settings disabled | FAIL (runs 11-20) | PASS | settings/brandVoice tables now in DB. Settings POST returns 200. |
 
 ## Test Coverage
 
@@ -201,12 +212,12 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] AI engagement prediction score shown before publishing *(UNVERIFIED — TASK-039 in unmerged branch ao/task-039)*
 
 ### Post Dashboard
-- [ ] Dashboard loads with post list *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
+- [x] Dashboard loads with post list *(PASS — 2026-03-29 run 21 — 200, BUG-016 RESOLVED)*
 - [ ] Search works *(not tested)*
 - [ ] Status filter works *(not tested)*
 - [ ] Platform filter works *(not tested)*
 - [ ] Quick stats show correct counts *(not tested)*
-- [ ] Bulk actions work (reschedule, delete, duplicate) *(UNVERIFIED — TASK-037 in unmerged branch ao/task-037)*
+- [ ] Bulk actions work (reschedule, delete, duplicate) *(not tested)*
 
 ### Social Accounts
 - [ ] Accounts page loads *(FAIL — /accounts 404, TASK-008 ready)*
@@ -215,20 +226,20 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] Disconnect account works *(not tested)*
 
 ### Campaigns
-- [ ] Campaign list page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-017, campaign table missing)*
+- [x] Campaign list page loads *(PASS — 2026-03-29 run 21 — 200, BUG-017 RESOLVED)*
 - [x] /campaigns/new loads *(PASS — 2026-03-29 run 7 — returns 200)*
 - [ ] Create campaign from AI brief works *(not tested)*
 - [ ] Campaign detail shows timeline and posts *(not tested)*
 - [ ] Pause/resume campaign works *(not tested)*
 
 ### Content Calendar
-- [ ] Calendar view loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
+- [x] Calendar view loads *(PASS — 2026-03-29 run 21 — 200, BUG-016 RESOLVED)*
 - [ ] Posts appear on correct dates *(not tested)*
 - [ ] Day/week/month views work *(not tested)*
 - [ ] Drag-and-drop rescheduling works *(UNVERIFIED — TASK-041 in unmerged branch ao/task-041)*
 
 ### Analytics
-- [ ] Analytics page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016, recycleCount column missing)*
+- [x] Analytics page loads *(PASS — 2026-03-29 run 21 — 200, BUG-016 RESOLVED)*
 - [ ] Per-platform metrics display *(not tested)*
 - [ ] Date range filtering works *(not tested)*
 - [ ] Charts render correctly *(not tested)*
@@ -257,8 +268,8 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - [ ] Business profile updates work *(not tested)*
 
 ### Navigation
-- [ ] All nav links work (no 404s/500s) *(FAIL — 2026-03-29 run 7 — /accounts 404 (BUG-007); /dashboard/posts/calendar/campaigns/analytics 500 (BUG-016/017))*
-- [ ] /posts page loads *(FAIL — 2026-03-29 run 7 — 500, BUG-016)*
+- [ ] All nav links work (no 404s/500s) *(FAIL — 2026-03-29 run 21 — / 500 (BUG-015); /accounts 404 (BUG-007). All other routes 200.)*
+- [x] /posts page loads *(PASS — 2026-03-29 run 21 — 200, BUG-016 RESOLVED)*
 - [ ] /settings page loads *(PASS — 2026-03-29 run 7)*
 - [ ] Mobile navigation works *(not tested)*
 - [ ] Back/forward browser buttons work *(not tested)*
@@ -271,7 +282,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 
 ## Environment Notes
 
-- App URL: PostPilot dev server NOT running (run 20). PID 65539 no longer exists. Port 3000 = CondoHub (PID 96743), port 3002 = Invoicer (PID 29494). PostPilot completely absent from process list. Run when server is started. TASK-086/088/090/091 all ghost-done (21+ attempts). button.tsx still present.
+- App URL: PostPilot dev server started on :3001 (PID 53780, run 22). Ports 3000/3002 were idle at start time. Server responds normally — no HTTP hang observed (unlike runs 17-19). TASK-107 in active triage for BUG-015. button.tsx still present.
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **CRITICALLY OUT OF DATE**: only has account/post/session/user/verification tables. Missing: settings, brandVoice, campaign tables + recycleCount/noRecycle columns on post. `pnpm db:push` has NEVER been run since run 7 merges.
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
 - AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
