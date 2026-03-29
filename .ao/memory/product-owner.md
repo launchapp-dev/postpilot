@@ -138,3 +138,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — DEFERRED — Post dashboard platform/campaign filters (TASK-052/054 ghost-done). 2-task limit reached. Create next cycle if TASK-076/077 are genuinely done.
 
 [2026-03-29] — PIPELINE STATUS (run 20) — 3 open tasks: TASK-057 [ready/low], TASK-076 [critical/enqueued], TASK-077 [high/enqueued]. HEALTHY.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 22) — READ-ONLY phase. Prior build confirmed passing (14 routes). button.tsx still present (confirmed via ls). src/app/accounts/ still missing (confirmed via ls). post-list.tsx confirmed no platform/campaign filters — only text search + status tabs.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 22) — TASK-078 (button.tsx delete) ghost-done: button.tsx still present at src/components/ui/button.tsx. Last git touch: 63cd453 (TASK-027) — no deletion commit. TASK-079 (accounts pages) ghost-done: src/app/accounts/ still does not exist, no socialAccount table in schema.ts. Pipeline was empty (0 open tasks at run start). bulk-action-bar.tsx DOES exist and is integrated into post-list.tsx — bulk actions are genuinely done.
+
+[2026-03-29] — CREATED TASK-080 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done 14 TIMES: TASK-046, 055, 058, 060, 062, 064, 066, 068, 070, 072, 074, 076, 078. 4-check verification checklist in description.
+
+[2026-03-29] — CREATED TASK-081 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccount DB schema + server actions. Ghost-done 14+ TIMES (TASK-008 through TASK-079). Full implementation spec + 5-check verification checklist.
+
+[2026-03-29] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Note: post-list.tsx currently only filters by text search + status. VISION.md requires platform, campaign, and date range filters. Create this as TASK-082 next cycle if TASK-080/081 are genuinely done.
+
+[2026-03-29] — PIPELINE STATUS (run 22) — 2 open tasks: TASK-080 [critical/enqueued], TASK-081 [high/enqueued]. HEALTHY.
