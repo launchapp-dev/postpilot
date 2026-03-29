@@ -7,6 +7,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { BulkActionBar } from "@/components/posts/bulk-action-bar";
 import { Search, Plus } from "lucide-react";
 
 type PostStatus = "draft" | "scheduled" | "published" | "failed";
@@ -43,31 +45,47 @@ function parsePlatforms(raw: string): string[] {
   }
 }
 
-function PostRow({ post }: { post: Post }) {
+function PostRow({
+  post,
+  selected,
+  onToggle,
+}: {
+  post: Post;
+  selected: boolean;
+  onToggle: (id: string) => void;
+}) {
   const preview = post.content.length > 80 ? post.content.slice(0, 80) + "…" : post.content;
   const platforms = parsePlatforms(post.platforms);
   const dateToShow = post.publishedAt ?? post.scheduledAt;
 
   return (
-    <Link
-      href={`/posts/${post.id}`}
-      className="flex flex-col gap-2 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50 sm:flex-row sm:items-center sm:gap-4"
-    >
-      <p className="flex-1 text-sm text-foreground line-clamp-2">{preview}</p>
-      <div className="flex shrink-0 flex-wrap items-center gap-2">
-        {platforms.map((p) => (
-          <Badge key={p} variant="outline" className="capitalize text-xs">
-            {p}
-          </Badge>
-        ))}
-        <Badge variant={STATUS_VARIANTS[post.status]}>{STATUS_LABELS[post.status]}</Badge>
-        {dateToShow && (
-          <span className="text-xs text-muted-foreground">
-            {format(dateToShow, "MMM d, yyyy")}
-          </span>
-        )}
-      </div>
-    </Link>
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50">
+      <Checkbox
+        checked={selected}
+        onCheckedChange={() => onToggle(post.id)}
+        aria-label="Select post"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <Link
+        href={`/posts/${post.id}`}
+        className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4"
+      >
+        <p className="flex-1 text-sm text-foreground line-clamp-2">{preview}</p>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {platforms.map((p) => (
+            <Badge key={p} variant="outline" className="capitalize text-xs">
+              {p}
+            </Badge>
+          ))}
+          <Badge variant={STATUS_VARIANTS[post.status]}>{STATUS_LABELS[post.status]}</Badge>
+          {dateToShow && (
+            <span className="text-xs text-muted-foreground">
+              {format(dateToShow, "MMM d, yyyy")}
+            </span>
+          )}
+        </div>
+      </Link>
+    </div>
   );
 }
 
@@ -93,12 +111,46 @@ const TAB_VALUES = ["all", "draft", "scheduled", "published", "failed"] as const
 export function PostList({ posts }: { posts: Post[] }) {
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<string>("all");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filtered = posts.filter((p) => {
     const matchesSearch = search === "" || p.content.toLowerCase().includes(search.toLowerCase());
     const matchesTab = tab === "all" || p.status === tab;
     return matchesSearch && matchesTab;
   });
+
+  function togglePost(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  function toggleAll() {
+    const filteredIds = new Set(filtered.map((p) => p.id));
+    const allSelected = filtered.every((p) => selectedIds.has(p.id));
+    if (allSelected) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        filteredIds.forEach((id) => next.delete(id));
+        return next;
+      });
+    } else {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        filteredIds.forEach((id) => next.add(id));
+        return next;
+      });
+    }
+  }
+
+  const allFilteredSelected = filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id));
+  const someFilteredSelected = filtered.some((p) => selectedIds.has(p.id));
 
   return (
     <div className="space-y-4">
@@ -111,6 +163,11 @@ export function PostList({ posts }: { posts: Post[] }) {
           className="pl-9"
         />
       </div>
+
+      <BulkActionBar
+        selectedIds={Array.from(selectedIds)}
+        onClear={() => setSelectedIds(new Set())}
+      />
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
@@ -131,8 +188,22 @@ export function PostList({ posts }: { posts: Post[] }) {
               )
             ) : (
               <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-3 px-1 pb-1">
+                  <Checkbox
+                    checked={allFilteredSelected}
+                    onCheckedChange={toggleAll}
+                    aria-label="Select all posts"
+                    data-indeterminate={someFilteredSelected && !allFilteredSelected}
+                  />
+                  <span className="text-xs text-muted-foreground">Select all</span>
+                </div>
                 {filtered.map((post) => (
-                  <PostRow key={post.id} post={post} />
+                  <PostRow
+                    key={post.id}
+                    post={post}
+                    selected={selectedIds.has(post.id)}
+                    onToggle={togglePost}
+                  />
                 ))}
               </div>
             )}
