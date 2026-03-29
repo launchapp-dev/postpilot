@@ -54,3 +54,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-29 19:47:23Z] — CLEAN_QUEUE — Queue empty; 0 dropped
 [2026-03-29 19:47:23Z] — MARK_DONE — No in-progress/review tasks with merged PRs; 0 marked
 [2026-03-29 19:47:23Z] — PIPELINE_STATUS — Ready: 3 (TASK-104, TASK-107, TASK-108), Queue: 0, Open PRs: 0; NOT idle (3 ready tasks flowing)
+[2026-03-29 20:03:40Z] — UNBLOCK_TASKS — 3 blocked tasks recovered from workflow runner failures: TASK-107 (button.tsx fix), TASK-104 (social accounts pages), TASK-108 (post dashboard filters); 3 unblocked
+[2026-03-29 20:03:40Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-29 20:03:40Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-29 20:03:40Z] — CLEAN_QUEUE — Queue empty; 0 dropped
+[2026-03-29 20:03:40Z] — MARK_DONE — 8 merged PRs with ao/task-* branches already tracked as done; 0 newly marked
+[2026-03-29 20:03:40Z] — PIPELINE_STATUS — Ready: 3 (TASK-107, TASK-104, TASK-108), Queue: 0, Open PRs: 0; NOT idle (3 ready tasks flowing for daemon execution)
