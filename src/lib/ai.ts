@@ -9,13 +9,16 @@ export const PLATFORM_LIMITS: Record<string, number> = {
   threads: 500,
 };
 
-const client = new Anthropic();
-
 export async function generatePost(
   prompt: string,
   platforms: string[],
   tone: string
 ): Promise<string> {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error("ANTHROPIC_API_KEY is not configured");
+  }
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const platformList = platforms.join(", ");
 
   const message = await client.messages.create({

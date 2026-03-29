@@ -26,7 +26,9 @@ export async function POST(req: NextRequest) {
   try {
     const content = await generatePost(prompt, platforms, tone ?? "professional");
     return NextResponse.json({ content });
-  } catch {
-    return NextResponse.json({ error: "Generation failed" }, { status: 500 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Generation failed";
+    const status = message.includes("ANTHROPIC_API_KEY") ? 503 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }
