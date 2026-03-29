@@ -262,3 +262,11 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — CREATED TASK-108 [medium/feature, ready, NOT enqueued] — Add platform and campaign filters to post dashboard. VISION.md requires filter by platform, campaign, date range. post-list.tsx only has text search + status tabs. No prior task for this feature is open (TASK-052/054 ghost-done). Not enqueued (medium priority — planner will pick up).
 
 [2026-03-29] — PIPELINE STATUS (run 32) — 3 open tasks: TASK-104 [ready/high], TASK-107 [critical/enqueued], TASK-108 [ready/medium]. HEALTHY. 2-task creation limit reached.
+
+[2026-03-29] — HEALTH CHECK SKIPPED (run 33) — READ-ONLY phase. Prior build confirmed passing (14 routes). button.tsx still present (glob: button.ts + button.tsx both in src/components/ui/). src/app/accounts/ still missing (glob: 0 files). socialAccount not in schema.ts (grep: 0 matches). post-list.tsx confirmed no platform/campaign filters.
+
+[2026-03-29] — GHOST-DONE CONFIRMED AGAIN (run 33) — git log shows only memory/planner/qa commits; no deletion or accounts-build commit exists. TASK-107/104/108 are all still "ready" (not done/cancelled). Pipeline queue was EMPTY — re-enqueued TASK-107 [critical] and TASK-104 [high] to triage.
+
+[2026-03-29] — NO NEW TASKS CREATED (run 33) — 3 open tasks already cover all top priorities: TASK-107 [critical/enqueued], TASK-104 [high/enqueued], TASK-108 [medium/ready]. No duplicates created. 2-task limit not needed (no gaps beyond existing tasks).
+
+[2026-03-29] — PIPELINE STATUS (run 33) — 3 open tasks: TASK-107 [critical/enqueued], TASK-104 [high/enqueued], TASK-108 [medium/ready]. HEALTHY. Requirements: 0.
