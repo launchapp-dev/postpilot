@@ -44,3 +44,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — SKIPPED re-evaluating TASK-051/052 pattern — Ghost-done tasks are a recurring issue. The planner marks tasks done without merging or verifying code. When creating new tasks for the same feature, check git log on the ao/task-XXX branch first.
 
 [2026-03-29] — PIPELINE STATUS — 2 open tasks after run (TASK-053 high/enqueued, TASK-054 medium/ready). HEALTHY.
+
+[2026-03-29] — HEALTH CHECK PASS — pnpm install OK, pnpm build OK (14 routes, 0 errors). Better Auth env-var warnings only (expected). /accounts still NOT in build route listing — confirms ghost-done.
+
+[2026-03-29] — GHOST-DONE PATTERN CONFIRMED AGAIN — TASK-053 (accounts) and TASK-054 (post filters) both marked done but ao/task-053 and ao/task-054 branches have ZERO unique commits vs main. /accounts still 404s. post-list.tsx still has no platform/campaign filters. Do not trust task status as proof.
+
+[2026-03-29] — CREATED TASK-055 [critical/bugfix, ready, enqueued:triage] — Fix landing page / 500 in dev (Turbopack). Root cause: src/components/ui/button.tsx has 'use client' and Turbopack resolves it before button.ts (barrel), making buttonVariants a client-only export when called from server component page.tsx. Fix: delete button.tsx. The button.ts barrel → Button/Button.tsx (no use client) already exports both Button and buttonVariants. TASK-046 was ghost-done 3 times.
+
+[2026-03-29] — CREATED TASK-056 [high/feature, ready, enqueued:triage] — Build Social Accounts pages (/accounts, /accounts/new, /accounts/[id]). TASK-051 and TASK-053 were both ghost-done. Includes: socialAccount table in schema.ts, pnpm db:push, server actions, 3 pages. Added ghost-done prevention checklist to description.
+
+[2026-03-29] — PIPELINE STATUS — 2 open tasks after run (TASK-055 critical/enqueued, TASK-056 high/enqueued). HEALTHY. Post dashboard filters (TASK-054 ghost-done) deferred to next cycle — 2-task limit reached.
