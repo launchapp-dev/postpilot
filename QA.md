@@ -12,7 +12,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | Duration | ~10 min |
 | Console Errors | RecycleCount SqliteError (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
 | Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 401 (API key invalid/missing), /accounts 404 |
-| New Tasks Created | TASK-043, TASK-044 |
+| New Tasks Created | TASK-045 (pnpm db:push), TASK-046 (landing 500), TASK-047 (merge branches) |
 
 ## Test Results History
 
@@ -25,7 +25,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-28 (run 4) | 2 | 4 | TASK-021 | Auth+dashboard PASS. All feature routes still 404. TASK-013/019/020 done but branches unmerged — TASK-021 created. New: 2 accessibility warnings on dashboard search input. |
 | 2026-03-28 (run 5) | 3 | 3 | TASK-028, TASK-029 | TASK-021/022/023/024 merged. Logout+OAuth+/posts/new now PASS. REGRESSION: dashboard/posts/calendar crash (SqliteError: no such column "prompt" — pnpm db:push not run after TASK-022 merge). AI gen 500. Accounts/campaigns/analytics/settings still 404. |
 | 2026-03-29 (run 6) | 4 | 2 | TASK-035 | BUG-011 RESOLVED: pnpm db:push run (TASK-028 done), dashboard/posts/calendar all PASS. Recurring unmerged-branches: TASK-009/014/015/027/029 done in worktrees but not on main — TASK-035 created. AI gen still 500 (no ANTHROPIC_API_KEY). Accounts 404 (TASK-008 still ready). |
-| 2026-03-29 (run 7) | 1 | 5 | TASK-043, TASK-044 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
+| 2026-03-29 (run 7) | 1 | 5 | TASK-045, TASK-046, TASK-047 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
 
 ## Known Issues
 
