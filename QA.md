@@ -6,8 +6,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-28 (run 14) |
-| Result | FAIL — No new code merged since run 13. App state identical. All known bugs persist. Auth API 200. Browser login redirects to crashing dashboard. /posts/new + /settings (loads, fields disabled) + /campaigns/new + /signup PASS. Logout timed out (flaky, 14th consecutive run). AI gen 500 — raw Anthropic 401 JSON in prompt area (BUG-012). |
+| Date | 2026-03-28 (run 15) |
+| Result | FAIL — No new code merged since run 14. App state identical. All known bugs persist. Browser login redirects to crashing dashboard. /posts/new + /settings (loads, fields disabled) + /campaigns/new + /signup PASS. Logout timed out (flaky, 15th consecutive run). AI gen 500 — /api/posts/generate returns 500 (BUG-012). |
 | Steps Passed | 1 of 6 |
 | Duration | ~15 min |
 | Console Errors | 500 errors (BUG-016/017), React DOM prop warning asChild/error (BUG-013), favicon 404 (BUG-009) |
@@ -21,6 +21,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 |------|--------|--------|-------------|-------|
 | 2026-03-28 (run 13) | 1 | 5 | none | No new code merged since run 12. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). Browser-based login redirects to crashing dashboard. Auth API 200 confirmed. Logout timeout again (flaky, run 13). /posts/new + /settings + /campaigns/new + /signup PASS. |
 | 2026-03-28 (run 14) | 1 | 5 | none | No new code merged since run 13. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). `/` 500 (SqliteError recycleCount). Login succeeds (browser → /dashboard crash). AI gen 500 with raw Anthropic 401 JSON in prompt area. Logout timeout (flaky, run 14). /posts/new + /settings (disabled) + /campaigns/new + /signup PASS. |
+| 2026-03-28 (run 15) | 1 | 5 | none | No new code merged since run 14. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). `/` 500 (SqliteError recycleCount). Login succeeds (browser → /dashboard crash). AI gen 500 (/api/posts/generate). Logout timeout (flaky, run 15). /posts/new + /settings (disabled) + /campaigns/new + /signup PASS. |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
@@ -165,6 +166,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 12) | All routes | same as run 11 | same as run 11 | No new merges to main since run 11 — app state unchanged |
 | 2026-03-28 (run 13) | All routes | same as run 12 | same as run 12 | No new merges to main since run 12 — app state unchanged |
 | 2026-03-28 (run 14) | All routes | same as run 13 | same as run 13 | No new merges to main since run 13 — app state unchanged |
+| 2026-03-28 (run 15) | All routes | same as run 14 | same as run 14 | No new merges to main since run 14 — app state unchanged |
 
 ## Test Coverage
 
