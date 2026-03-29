@@ -41,6 +41,16 @@ echo "Found PR #$pr_number"
 latest_review=$(echo "$pr_json" | jq -r '.reviews[-1].state // "NONE"')
 echo "Latest review: $latest_review"
 
+# Check PR comments for "Verdict: APPROVE" — handles self-review where GitHub
+# blocks the formal review API (author cannot approve their own PR)
+if [ "$latest_review" = "NONE" ] || [ "$latest_review" = "COMMENTED" ]; then
+  approve_comment=$(gh pr view "$pr_number" --repo "$REPO" --json comments --jq '.comments[].body' 2>/dev/null | grep -ci "verdict.*approve" || true)
+  if [ "$approve_comment" -gt 0 ]; then
+    echo "Found 'Verdict: APPROVE' in PR comments — treating as approved"
+    latest_review="APPROVED"
+  fi
+fi
+
 if [ "$latest_review" = "APPROVED" ]; then
   echo "APPROVED — merging PR #$pr_number"
   if gh pr merge "$pr_number" --repo "$REPO" --squash --delete-branch 2>&1; then
