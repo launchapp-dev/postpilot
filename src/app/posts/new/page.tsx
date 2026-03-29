@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sidebar } from "@/components/layout/sidebar";
+import { PlatformPreview } from "@/components/posts/platform-preview";
 import { createPost } from "@/app/posts/actions";
 import { ArrowLeft, Sparkles, Save, Clock } from "lucide-react";
 
@@ -21,7 +22,7 @@ const PLATFORMS = [
   { id: "tiktok", label: "TikTok", limit: 2200 },
   { id: "bluesky", label: "Bluesky", limit: 300 },
   { id: "threads", label: "Threads", limit: 500 },
-] as const;
+];
 
 const TONES = [
   { value: "professional", label: "Professional" },
@@ -242,6 +243,20 @@ export default function NewPostPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {selectedPlatforms.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Platform Preview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <PlatformPreview
+                      platforms={PLATFORMS.filter((p) => selectedPlatforms.includes(p.id))}
+                      content={content}
+                    />
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             <div className="space-y-4">
