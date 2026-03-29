@@ -12,3 +12,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-29] — MARK_DONE — All merged PR tasks already marked done (TASK-040, 038, 036, 034, 031, 029, 024); 0 newly marked
 [2026-03-29] — CLEAN_QUEUE — 1 queue entry (TASK-050 standard) is recent; 0 dropped
 [2026-03-29] — PIPELINE_STATUS — Ready: 4, Queue: 1, Open PRs: 0; NOT idle (no product-review triggered)
+[2026-03-28] — UNBLOCK_TASKS — No blocked tasks found; 0 unblocked
+[2026-03-28] — PROMOTE_BACKLOG — No backlog tasks to promote; 0 promoted
+[2026-03-28] — RE_ROUTE_FAILED — No failed tasks identified; 0 re-routed
+[2026-03-28] — CLEAN_QUEUE — Queue was empty; 0 dropped
+[2026-03-28] — MARK_DONE — Marked TASK-007 as done (QA verification with completed_at timestamp stuck in ready state); 1 marked
+[2026-03-28] — PIPELINE_STATUS — Ready: 0, Queue: 1 (product-review), Open PRs: 0; idle (product-review triggered)
