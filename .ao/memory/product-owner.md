@@ -20,3 +20,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — SKIPPED TASK-047 [high] — "Merge TASK-037/039/041 branches" — all three branches have zero commits not on main; features were never coded. TASK-050 addresses bulk actions specifically. Engagement prediction (TASK-039) and calendar drag-drop (TASK-041) also need re-implementation but left for future cycles.
 
 [2026-03-29] — PIPELINE STATUS — 7 open tasks after this run. TASK-044/045 are duplicates (only 1 needed). TASK-047 is stale/mischaracterized. Real work queue: TASK-046, TASK-044, TASK-047 (or TASK-050), TASK-049.
+
+[2026-03-29] — HEALTH CHECK PASS — pnpm install OK, pnpm build OK (Next.js 16.2.1, 14 routes, 0 errors).
+
+[2026-03-29] — PIPELINE EMPTY — All prior tasks (TASK-001 through TASK-050) are done or cancelled. No open tasks at start of this run.
+
+[2026-03-29] — CREATED TASK-051 [high/feature, ready, enqueued:triage] — Build Social Accounts pages (/accounts, /accounts/new, /accounts/[id]). Confirmed via code exploration: these pages do not exist despite sidebar Accounts link. TASK-049 "merged ao/task-008" but accounts pages never landed on main. Sidebar link 404s. Enqueued immediately (high priority).
+
+[2026-03-29] — CREATED TASK-052 [medium/feature, ready] — Add platform and campaign filters to post dashboard. VISION.md specifies filter by platform, campaign, date range. Current post-list.tsx only has text search + status tabs. Not enqueued (medium — planner will pick up).
+
+[2026-03-29] — REQUIREMENTS: None exist in system. Skipped requirement creation (pipeline now has 2 fresh tasks, no orphaned requirements to manage).
+
+[2026-03-29] — PIPELINE STATUS — 2 open tasks after run (TASK-051 high/enqueued, TASK-052 medium/ready). HEALTHY.
