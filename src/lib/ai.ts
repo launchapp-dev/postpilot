@@ -1,5 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk";
 
+export const PLATFORM_LIMITS: Record<string, number> = {
+  twitter: 280,
+  linkedin: 3000,
+  instagram: 2200,
+  tiktok: 2200,
+  bluesky: 300,
+  threads: 500,
+};
+
 const client = new Anthropic();
 
 export async function generatePost(
