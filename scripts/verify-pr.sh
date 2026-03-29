@@ -16,7 +16,7 @@ else
   fi
   title=$(echo "$pr_json" | jq -r '.title')
   task_num=$(echo "$title" | grep -oE '[0-9]+' | head -1)
-  task_id=$(printf 'TASK-%03d' "$task_num")
+  task_id=$(printf 'TASK-%03d' "$((10#$task_num))")
 fi
 
 echo "Verifying PR for $task_id"
