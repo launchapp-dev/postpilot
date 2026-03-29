@@ -22,7 +22,7 @@ mcp_servers:
     args: ["-y", "mcp-package-version"]
   playwright:
     command: npx
-    args: ["-y", "@playwright/record-mcp@latest", "--record", "--record-format", "webm", "--output-dir", ".ao/recordings"]
+    args: ["-y", "@playwright/record-mcp@latest", "--record", "--record-format", "webm", "--output-dir", "/Users/samishukri/mcprecording/postpilot"]
 
 agents:
   default:
