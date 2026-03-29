@@ -63,6 +63,8 @@ export const post = sqliteTable("post", {
   scheduledAt: integer("scheduledAt", { mode: "timestamp" }),
   publishedAt: integer("publishedAt", { mode: "timestamp" }),
   prompt: text("prompt"),
+  publishAttempts: integer("publishAttempts").notNull().default(0),
+  nextRetryAt: integer("nextRetryAt", { mode: "timestamp" }),
   campaignId: text("campaignId"),
   createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
