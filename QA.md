@@ -6,13 +6,13 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-29 (run 7) |
-| Result | FAIL — Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics/campaigns 500 (BUG-016/017 — pnpm db:push needed after TASK-031/034); /accounts 404 (BUG-007); /settings + /posts/new PASS; auth PASS |
+| Date | 2026-03-29 (run 8) |
+| Result | FAIL — No new fixes deployed since run 7. All run 7 bugs still open: Landing page 500 (BUG-015); Dashboard/posts/calendar/analytics/campaigns 500 (BUG-016/017); /accounts 404 (BUG-007); /settings + /posts/new PASS; auth PASS |
 | Steps Passed | 1 of 6 |
 | Duration | ~10 min |
-| Console Errors | RecycleCount SqliteError (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
-| Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 401 (API key invalid/missing), /accounts 404 |
-| New Tasks Created | TASK-045 (pnpm db:push), TASK-046 (landing 500), TASK-047 (merge branches) |
+| Console Errors | SqliteError recycleCount (BUG-016), campaign table missing (BUG-017), buttonVariants "use client" error (BUG-015) |
+| Network Errors | `/` 500, /dashboard 500, /posts 500, /calendar 500, /analytics 500, /campaigns 500, /api/posts/generate 500 (Anthropic 401 invalid x-api-key), /accounts 404 |
+| New Tasks Created | none — all failures are known bugs from run 7, TASK-045/046/047 still open |
 
 ## Test Results History
 
@@ -26,6 +26,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-28 (run 5) | 3 | 3 | TASK-028, TASK-029 | TASK-021/022/023/024 merged. Logout+OAuth+/posts/new now PASS. REGRESSION: dashboard/posts/calendar crash (SqliteError: no such column "prompt" — pnpm db:push not run after TASK-022 merge). AI gen 500. Accounts/campaigns/analytics/settings still 404. |
 | 2026-03-29 (run 6) | 4 | 2 | TASK-035 | BUG-011 RESOLVED: pnpm db:push run (TASK-028 done), dashboard/posts/calendar all PASS. Recurring unmerged-branches: TASK-009/014/015/027/029 done in worktrees but not on main — TASK-035 created. AI gen still 500 (no ANTHROPIC_API_KEY). Accounts 404 (TASK-008 still ready). |
 | 2026-03-29 (run 7) | 1 | 5 | TASK-045, TASK-046, TASK-047 | BUG-015: Landing page `/` 500 — buttonVariants() from "use client" module called in server component. BUG-016: dashboard/posts/calendar/analytics 500 — recycleCount/noRecycle columns missing (pnpm db:push after TASK-031). BUG-017: /campaigns 500 — campaign table missing (pnpm db:push after TASK-014/033). /settings 200 PASS. /posts/new 200 PASS (From Source feature present, TASK-040). AI gen now 401 not 500 (API key error surfaces). TASK-037/039/041 unmerged. |
+| 2026-03-29 (run 8) | 1 | 5 | none | No new fixes deployed since run 7. All run 7 bugs persist. AI gen HTTP 500 wrapping Anthropic 401 (run 7 note of "401" was inaccurate — HTTP status has always been 500). TASK-043 marked done but ao/task-008 still not merged to main — /accounts still 404. TASK-045/046/047 still in backlog. |
 
 ## Known Issues
 
@@ -144,6 +145,7 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 | 2026-03-29 (run 7) | Dashboard loads | PASS (run 6) | FAIL (run 7) | TASK-031 added recycleCount/noRecycle columns without running pnpm db:push — BUG-016 |
 | 2026-03-29 (run 7) | /campaigns | 404 (run 6) | 500 (run 7) | TASK-035 merged campaign code, pnpm db:push not run — campaign table missing — BUG-017 |
 | 2026-03-29 (run 7) | /analytics | 404 (run 6) | 500 (run 7) | TASK-015 merged analytics code, recycleCount column missing — BUG-016 |
+| 2026-03-29 (run 8) | All routes | same as run 7 | same as run 7 | No new merges to main since run 7 — app state unchanged |
 
 ## Test Coverage
 
@@ -224,6 +226,6 @@ Two "Input: missing label association" warnings on /dashboard. The search input 
 - App URL: http://localhost:3001 (port 3000 occupied by CondoHub, 3002 by another project)
 - Database: SQLite via Drizzle ORM (`postpilot.db`) — **SCHEMA OUT OF DATE** as of run 7: missing recycleCount/noRecycle columns and campaign table — run `pnpm db:push`
 - Auth: Better Auth — requires BETTER_AUTH_SECRET and BETTER_AUTH_URL in .env
-- AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns 401)
+- AI generation: requires ANTHROPIC_API_KEY in .env.local — currently present but invalid (returns HTTP 500 wrapping Anthropic 401 authentication_error)
 - Test credentials: qa-test@postpilot.dev / TestPass123!
-- Unmerged branches: ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop)
+- Unmerged branches: ao/task-008 (social accounts), ao/task-037 (bulk actions), ao/task-039 (engagement prediction), ao/task-041 (calendar drag-and-drop)
