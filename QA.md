@@ -6,19 +6,20 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 45) |
-| Result | PARTIAL PASS — No new code merged since run 44 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen returns `{"error":"ANTHROPIC_API_KEY is not configured"}` (BUG-012). All other 9 authenticated routes 200. Auth PASS (browser login → dashboard, ~20s). Dashboard shows 20 drafts from previous runs. Logout: browser session reset (flaky, 45th consecutive). |
-| Steps Passed | 4 of 6 |
-| Duration | ~20 min |
+| Date | 2026-03-30 (run 46) |
+| Result | PARTIAL PASS — No new code merged since run 45 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS (token obtained via curl, cookie injection). Save Draft: server action POST hangs (system load avg 290) — no new post created, DB still at 20 posts. Logout: not tested (system overload). |
+| Steps Passed | 3 of 6 |
+| Duration | ~30 min |
 | Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on / |
-| Network Errors | `/` 500 (BUG-015); /accounts 500 BUG-020 (SqliteError: no such table: socialAccount); /api/posts/generate 503 (BUG-012) |
-| New Tasks Created | none — all failures are known bugs |
+| Network Errors | `/` 500 (BUG-015); /accounts 500 BUG-020 (SqliteError: no such table: socialAccount); /api/posts/generate 503 (BUG-012); /posts/new POST server action pending/hanging (system load 290) |
+| New Tasks Created | none — all failures are known bugs; Save Draft hang is environmental (system overload) |
 
 ## Test Results History
 
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 46) | 3 | 3 | none | No new code merged since run 45 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS (token via curl, cookie injection). Save Draft: server action POST pending/hanging — no new post created (DB still at 20). System load avg 290 causing all server ops to hang. Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 45) | 4 | 2 | none | No new code merged since run 44 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen `{"error":"ANTHROPIC_API_KEY is not configured"}` (BUG-012). All other 9 authenticated routes 200. Auth PASS (browser login → dashboard ~20s). Dashboard shows 20 drafts. Logout browser session reset (flaky, 45th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 44) | 4 | 2 | none | No new code merged since run 43 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS but slow (~64s POST — system load from concurrent agents). Save Draft PASS (post /posts/sjoaanhcg9mncyg2ut created, 20 drafts in dashboard). Logout timeout (flaky, 44th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 43) | 4 | 2 | none | No new code merged since run 42 (only memory/planner/reconciler commits). Server already running on :3001. `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 still in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 8 authenticated routes 200. Auth PASS (API 200, cookie injection, dashboard loads with 19 posts). Save Draft PASS (QA run 43 post created, 19 drafts in dashboard). Logout timeout (flaky, 43rd consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
