@@ -6,12 +6,12 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 32) |
-| Result | PARTIAL PASS — No new code merged to main since run 31 (only memory/planner commits). Server already running on :3001 (PIDs 41433/41445). `/` unauthenticated 500 (BUG-015 persists). /accounts 404 (BUG-007 persists). AI gen 503 (BUG-012 persists, "ANTHROPIC_API_KEY is not configured" shown in UI). All other authenticated routes 200. Auth PASS (login → /dashboard, 7 drafts visible). Save Draft PASS (post created, appeared in dashboard). TASK-107 fix commit e16651d still not merged — 32nd run with BUG-015. |
+| Date | 2026-03-30 (run 33) |
+| Result | PARTIAL PASS — No new code merged to main since run 32 (only memory/planner commits). Server already running on :3001 (PIDs 41445/46407). `/` unauthenticated 500 (BUG-015 persists). /accounts 404 (BUG-007 persists). AI gen 401/503 (BUG-012 persists). All other authenticated routes 200. Auth PASS (session active, dashboard loaded). Save Draft PASS (post /posts/rt7nkoqf0ammncit03q created, appeared in dashboard). TASK-107 fix commit e16651d still not merged — 33rd run with BUG-015. |
 | Steps Passed | 4 of 6 |
 | Duration | ~10 min |
-| Console Errors | BUG-015 buttonVariants() on /; BUG-019 asChild on auth routes; BUG-013 error=false |
-| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 503 (BUG-012) |
+| Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on /; BUG-007 404 on /accounts |
+| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 401/503 (BUG-012) |
 | New Tasks Created | None — all failures are known bugs with existing tasks |
 
 ## Test Results History
@@ -39,6 +39,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 | 2026-03-29 (run 30) | 4 | 2 | none | No new code merged to main since run 29 (only memory/planner commits). Server already on :3001 (PIDs 41445/46407). `/` unauthenticated 500 (BUG-015). `/` authenticated 307→/dashboard (new: middleware redirects authenticated users). /accounts 404 (BUG-007). AI gen 503 (BUG-012). All 9 other authenticated routes 200. Auth PASS (login 200, session token obtained). Dashboard loads (5 drafts visible). Post edit page 200. TASK-107 fix commit e16651d still not merged to main. Console: BUG-019 asChild, BUG-015 buttonVariants() errors. |
 | 2026-03-29 (run 31) | 4 | 2 | none | No new code merged since run 30 (only memory/planner commits). Server NOT running at start — started fresh on :3001 (node v22). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other authenticated routes 200. Auth PASS (cookie-based session, dashboard loads). TASK-107 fix commit e16651d still not merged (31st run with BUG-015). |
 | 2026-03-30 (run 32) | 4 | 2 | none | No new code merged since run 31 (only memory/planner commits). Server already running on :3001 (PIDs 41433/41445). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (login → /dashboard, 7 drafts). Save Draft PASS (post created). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix still not merged (32nd run). |
+| 2026-03-30 (run 33) | 4 | 2 | none | No new code merged since run 32 (only memory/planner commits). Server already running on :3001 (PIDs 41445/46407). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 401/503 (BUG-012). All other routes 200. Auth PASS (session active, dashboard loads). Save Draft PASS (post /posts/rt7nkoqf0ammncit03q created, appeared in dashboard). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix commit e16651d still not merged (33rd run). |
 | 2026-03-28 | 1 | 5 | BUG-001 (TASK-005) | PostPilot dev server not running; invoicer project on port 3000 |
 | 2026-03-28 (run 2) | 3 | 3 | TASK-013, TASK-014, TASK-015 | App runs on port 3001 (3000 taken by CondoHub). Auth+dashboard PASS. 6/7 nav routes 404. |
 | 2026-03-28 (run 3) | 2 | 4 | TASK-018 | Auth+dashboard PASS. All feature routes still 404. TASK-013/016/017 done but branches unmerged — TASK-018 created. |
