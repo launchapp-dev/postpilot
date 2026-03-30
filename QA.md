@@ -6,12 +6,12 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 33) |
-| Result | PARTIAL PASS — No new code merged to main since run 32 (only memory/planner commits). Server already running on :3001 (PIDs 41445/46407). `/` unauthenticated 500 (BUG-015 persists). /accounts 404 (BUG-007 persists). AI gen 401/503 (BUG-012 persists). All other authenticated routes 200. Auth PASS (session active, dashboard loaded). Save Draft PASS (post /posts/rt7nkoqf0ammncit03q created, appeared in dashboard). TASK-107 fix commit e16651d still not merged — 33rd run with BUG-015. |
+| Date | 2026-03-30 (run 34) |
+| Result | PARTIAL PASS — No new code merged to main since run 33 (only memory/planner commits). Server started fresh on :3001 (node v22). `/` unauthenticated 500 (BUG-015 persists). /accounts 404 (BUG-007 persists). AI gen 503 (BUG-012 persists, "ANTHROPIC_API_KEY is not configured"). All other authenticated routes 200. Auth PASS (browser login works but takes ~8s to redirect — earlier "stuck" was a timeout artifact). Save Draft PASS (post /posts/pz57ocqscasmncm64gq created, appeared in dashboard). Logout timeout (flaky, 34th consecutive). TASK-107 fix commit e16651d still not merged — 34th run with BUG-015. |
 | Steps Passed | 4 of 6 |
-| Duration | ~10 min |
-| Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on /; BUG-007 404 on /accounts |
-| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 401/503 (BUG-012) |
+| Duration | ~15 min |
+| Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on /; BUG-007 404 on /accounts; hydration mismatch (related to BUG-019) |
+| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 503 (BUG-012) |
 | New Tasks Created | None — all failures are known bugs with existing tasks |
 
 ## Test Results History
@@ -19,6 +19,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 34) | 4 | 2 | none | No new code merged since run 33 (only memory/planner commits). Server started fresh on :3001 (node v22). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (browser login ~8s redirect). Save Draft PASS (post /posts/pz57ocqscasmncm64gq). Logout timeout (flaky, 34th consecutive). TASK-107 fix still not merged. |
 | 2026-03-28 (run 13) | 1 | 5 | none | No new code merged since run 12. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). Browser-based login redirects to crashing dashboard. Auth API 200 confirmed. Logout timeout again (flaky, run 13). /posts/new + /settings + /campaigns/new + /signup PASS. |
 | 2026-03-28 (run 14) | 1 | 5 | none | No new code merged since run 13. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). `/` 500 (SqliteError recycleCount). Login succeeds (browser → /dashboard crash). AI gen 500 with raw Anthropic 401 JSON in prompt area. Logout timeout (flaky, run 14). /posts/new + /settings (disabled) + /campaigns/new + /signup PASS. |
 | 2026-03-28 (run 15) | 1 | 5 | none | No new code merged since run 14. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). `/` 500 (SqliteError recycleCount). Login succeeds (browser → /dashboard crash). AI gen 500 (/api/posts/generate). Logout timeout (flaky, run 15). /posts/new + /settings (disabled) + /campaigns/new + /signup PASS. |
