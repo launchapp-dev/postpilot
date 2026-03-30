@@ -6,19 +6,20 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 36) |
-| Result | PARTIAL PASS — No new code merged to main since run 35 (only memory/planner/product-owner commits). Server already running on :3001. `/` unauthenticated 500 (BUG-015 persists). Authenticated `/` → 307→/dashboard. /accounts 404 (BUG-007 persists). AI gen 503 "ANTHROPIC_API_KEY is not configured" (BUG-012 persists). All other 9 authenticated routes 200. Auth PASS (login → /dashboard, ~5s redirect). Save Draft PASS (post /posts/z011xfhmnwemnco5744 created, dashboard shows 11 drafts). TASK-107 fix commit e16651d still not merged — 36th run with BUG-015. |
+| Date | 2026-03-30 (run 37) |
+| Result | PARTIAL PASS — TASK-111 (accounts pages) merged to main. NEW: /accounts changed from 404 → 500 (SqliteError: no such table: socialAccount — pnpm db:push not run after merge). `/` 500 (BUG-015, button.tsx still present). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (login → /dashboard). Save Draft PASS (QA test post run 37, 12 drafts in dashboard). TASK-112 created for db:push. |
 | Steps Passed | 4 of 6 |
 | Duration | ~15 min |
 | Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on / |
-| Network Errors | `/` 500 (BUG-015); /accounts 404 (BUG-007); /api/posts/generate 503 (BUG-012) |
-| New Tasks Created | None — all failures are known bugs with existing tasks |
+| Network Errors | `/` 500 (BUG-015); /accounts 500 BUG-020 (SqliteError: no such table: socialAccount); /api/posts/generate 503 (BUG-012) |
+| New Tasks Created | TASK-112 — pnpm db:push after TASK-111 merge (BUG-020) |
 
 ## Test Results History
 
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 37) | 4 | 2 | TASK-112 | NEW: TASK-111 merged (accounts pages). /accounts now 500 instead of 404 (SqliteError: no such table: socialAccount — needs db:push). TASK-112 created. `/` 500 (BUG-015, button.tsx still present, TASK-109/110 ready). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (login → /dashboard). Save Draft PASS (QA run 37 post, 12 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 36) | 4 | 2 | none | No new code merged since run 35 (only memory/planner/product-owner commits). Server already running on :3001. `/` unauthenticated 500 (BUG-015), authenticated `/` → 307→/dashboard. /accounts 404 (BUG-007). AI gen 503 (BUG-012). All other 9 routes 200. Auth PASS (login → /dashboard, ~5s). Save Draft PASS (post /posts/z011xfhmnwemnco5744, 11 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix commit e16651d still not merged (36th run). |
 | 2026-03-30 (run 35) | 4 | 2 | none | No new code merged since run 34 (only memory/planner commits). Server on :3001 (PID 32564). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other 8 routes 200. Auth PASS (login → /dashboard). Save Draft PASS (post /posts/h6zhnue5yypmncn3hgn, 10 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix commit e16651d still not merged (35th run). |
 | 2026-03-30 (run 34) | 4 | 2 | none | No new code merged since run 33 (only memory/planner commits). Server started fresh on :3001 (node v22). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (browser login ~8s redirect). Save Draft PASS (post /posts/pz57ocqscasmncm64gq). Logout timeout (flaky, 34th consecutive). TASK-107 fix still not merged. |
@@ -95,11 +96,15 @@ Pages not built. Task created: TASK-014.
 
 Page not built. Task created: TASK-015.
 
-### BUG-007 — /accounts, /accounts/new, /accounts/[id] return 404 [OPEN — TASK-008 ready]
+### BUG-007 — /accounts 404 [RESOLVED — 2026-03-30 run 37 by TASK-111 merge]
 
-**Severity:** High (nav link broken)
+TASK-111 merged adding socialAccount schema + /accounts pages. /accounts now returns 500 (SqliteError: no such table: socialAccount) instead of 404. See BUG-020.
 
-Pages not built. Feature task TASK-008 is ready and unstarted.
+### BUG-020 — /accounts 500: SqliteError: no such table: socialAccount [OPEN — TASK-112]
+
+**Severity:** High (accounts page unusable)
+
+TASK-111 merged the socialAccount schema but `pnpm db:push` was not run. DB does not have the `socialAccount` table. Fix: run `pnpm db:push` (Node v22) in postpilot repo root. TASK-112 created.
 
 ### BUG-008 — /settings returns 404 [OPEN — TASK-009 ready]
 
