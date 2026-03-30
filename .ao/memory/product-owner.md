@@ -364,3 +364,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-30] — CREATED TASK-117 [high/chore, ready, enqueued:triage] — Merge ao/task-115 calendar drag-and-drop branch to main. TASK-115 ghost-done: b8a6a64 exists ONLY on ao/task-115 (not main). 5-check verification checklist in description. 2-task limit: only 1 task created (5 total open tasks now).
 
 [2026-03-30] — PIPELINE STATUS (run 43) — 5 open tasks: TASK-109 [critical/enqueued], TASK-114 [critical/enqueued], TASK-117 [high/enqueued], TASK-113 [medium/ready], TASK-116 [medium/ready]. HEALTHY. Requirements: 0. Top concern: critical tasks (button.tsx delete, .nvmrc) have code on branches but merge not happening — planner/triage keeps ghost-doing or not merging.
+
+[2026-03-30] — HEALTH CHECK SKIPPED (run 44) — READ-ONLY phase. Prior build confirmed passing (19 routes, Node 22, run 41). No source-code commits since then (only memory/planner/qa commits since b3a42b4). Inferred: build still passes.
+
+[2026-03-30] — STATE CONFIRMED (run 44) — button.tsx still present on main (only commit 63cd453, no deletion). .nvmrc NOT on main. Calendar dnd: 0 drag code on main, ao/task-115 and ao/task-117 branches do NOT exist remotely. Post dashboard filters: no filter UI on main. Engagement prediction: no code on main. /accounts confirmed present (956b0c5). socialAccount in schema.ts (line 102).
+
+[2026-03-30] — TASK-117 CONCERN (run 44) — TASK-117 says "merge ao/task-115 to main" but neither ao/task-115 nor ao/task-117 exist as remote branches. Prior memory note (run 43) references b8a6a64 on ao/task-115 — branch may have been deleted. TASK-117 effectively cannot be completed as written (no branch to merge). Planner should re-implement calendar dnd from scratch.
+
+[2026-03-30] — NO NEW TASKS CREATED (run 44) — 5 open tasks at run start (TASK-109, TASK-114, TASK-117, TASK-113, TASK-116). At saturation threshold. All VISION.md gaps covered. Queue was empty at run start — enqueued TASK-109 [critical] and TASK-114 [critical] to triage.
+
+[2026-03-30] — PIPELINE STATUS (run 44) — 5 open tasks: TASK-109 [critical/enqueued], TASK-114 [critical/enqueued], TASK-117 [high/ready], TASK-113 [medium/ready], TASK-116 [medium/ready]. HEALTHY. Requirements: 0. Top concern: TASK-109/114 have code on their branches but remain unmerged — planner must merge not re-implement.
