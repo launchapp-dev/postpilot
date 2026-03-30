@@ -99,6 +99,25 @@ export const brandVoice = sqliteTable("brandVoice", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
+export const socialAccount = sqliteTable("socialAccount", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  platform: text("platform", {
+    enum: ["twitter", "linkedin", "instagram", "tiktok", "bluesky", "threads"],
+  }).notNull(),
+  handle: text("handle").notNull(),
+  displayName: text("displayName"),
+  status: text("status", { enum: ["connected", "disconnected"] })
+    .notNull()
+    .default("connected"),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+});
+
 export const post = sqliteTable("post", {
   id: text("id").primaryKey(),
   userId: text("userId")
