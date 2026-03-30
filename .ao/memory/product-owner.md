@@ -354,3 +354,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-30] — NO NEW TASKS CREATED (run 42) — 6 open tasks cover all current gaps. All VISION.md feature gaps (filters, calendar-dnd, engagement-prediction) are tracked. Pipeline is at 6 tasks; no new work warranted. Requirements: 0 (none exist).
 
 [2026-03-30] — PIPELINE STATUS (run 42) — 6 open tasks: TASK-109 [critical/enqueued], TASK-114 [critical/enqueued], TASK-112 [high/enqueued], TASK-113 [medium/ready], TASK-115 [blocked/medium], TASK-116 [medium/ready]. HEALTHY. Requirements: 0.
+
+[2026-03-30] — HEALTH CHECK SKIPPED (run 43) — READ-ONLY phase. Prior build confirmed passing (19 routes, Node 22). button.tsx still present (ls: button.ts + button.tsx both in src/components/ui/). src/app/accounts/ confirmed present. socialAccount in schema.ts (line 102). git log shows only memory/planner/qa commits (latest: c9d9e56 qa run 55).
+
+[2026-03-30] — STATE CHANGE (run 43) — Tasks resolved since run 42: TASK-112 [done] (db:push for socialAccount complete), TASK-115 [GHOST-DONE] (calendar dnd marked done but code on ao/task-115 branch b8a6a64 NOT on main — grep returns 0 drag matches in calendar-client.tsx). Open tasks at run start: TASK-109 [critical/ready], TASK-114 [critical/ready], TASK-113 [medium/ready], TASK-116 [medium/ready]. Queue: only TASK-022 (pr-reviewer) pending — critical tasks NOT in queue.
+
+[2026-03-30] — ENQUEUED (run 43) — TASK-109 [critical] and TASK-114 [critical] enqueued to triage. Both have actual code on branches (ao/task-109 f1f01b4 button.tsx delete, ao/task-114 f656385 .nvmrc) — just need merging.
+
+[2026-03-30] — CREATED TASK-117 [high/chore, ready, enqueued:triage] — Merge ao/task-115 calendar drag-and-drop branch to main. TASK-115 ghost-done: b8a6a64 exists ONLY on ao/task-115 (not main). 5-check verification checklist in description. 2-task limit: only 1 task created (5 total open tasks now).
+
+[2026-03-30] — PIPELINE STATUS (run 43) — 5 open tasks: TASK-109 [critical/enqueued], TASK-114 [critical/enqueued], TASK-117 [high/enqueued], TASK-113 [medium/ready], TASK-116 [medium/ready]. HEALTHY. Requirements: 0. Top concern: critical tasks (button.tsx delete, .nvmrc) have code on branches but merge not happening — planner/triage keeps ghost-doing or not merging.
