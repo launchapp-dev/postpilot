@@ -84,3 +84,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 02:03:23Z] — CLEAN_QUEUE — 1 assigned entry (product-review, assigned 1m 43s ago) actively processing; 0 dropped
 [2026-03-30 02:03:23Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 02:03:23Z] — PIPELINE_STATUS — Ready: 0, Queue: 1 (assigned, product-review), Open PRs: 0; NOT idle (workflow active)
+[2026-03-30 03:03:02Z] — UNBLOCK_TASKS — TASK-110 (workflow runner fail) and TASK-111 (workflow runner fail) recovered, set to ready; 2 unblocked
+[2026-03-30 03:03:02Z] — PROMOTE_BACKLOG — TASK-109 (FORCE-FIX button.tsx) promoted from backlog to ready; 1 promoted
+[2026-03-30 03:03:02Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-30 03:03:02Z] — CLEAN_QUEUE — 1 assigned entry (product-review, assigned 43s ago) fresh, actively processing; 0 dropped
+[2026-03-30 03:03:02Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 03:03:02Z] — PIPELINE_STATUS — Ready: 3 (TASK-110, TASK-111, TASK-109), Queue: 1 (assigned, product-review), Open PRs: 0; NOT idle (3 ready + active workflow)
