@@ -6,8 +6,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 39) |
-| Result | PARTIAL PASS — No new code merged since run 38 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, button.tsx still present, TASK-107 fix in ready). /accounts 500 BUG-020 (socialAccount table missing — TASK-112 in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS (session active, dashboard loads with 14 posts). Save Draft PASS (post /posts/u74w9g3lwm7mncre3zq created). Logout timeout (flaky, 39th consecutive). |
+| Date | 2026-03-30 (run 40) |
+| Result | PARTIAL PASS — No new code merged since run 39 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, button.tsx still present, TASK-107 fix in ready). /accounts 500 BUG-020 (socialAccount table missing — TASK-112 in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS (login → /dashboard confirmed). Save Draft PASS (2 posts created, 16 drafts in dashboard). Logout timeout (flaky, 40th consecutive). |
 | Steps Passed | 4 of 6 |
 | Duration | ~15 min |
 | Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on / |
@@ -19,6 +19,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 40) | 4 | 2 | none | No new code merged since run 39 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, button.tsx still present, TASK-107 fix in ready). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 routes 200. Auth PASS (login → /dashboard confirmed). Save Draft PASS (2 posts created, 16 drafts in dashboard). Logout timeout (flaky, 40th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 39) | 4 | 2 | none | No new code merged since run 38 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, TASK-107 fix in ready). /accounts 500 BUG-020 (socialAccount table missing — TASK-112 in ready). AI gen 503 (BUG-012). All other 9 routes 200. Auth PASS (session active, 14 posts in dashboard). Save Draft PASS (post /posts/u74w9g3lwm7mncre3zq, 14 drafts). Logout timeout (flaky, 39th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 38) | 4 | 2 | none | No new code merged since run 37 (only memory/planner commits). `/` 500 (BUG-015, button.tsx still present, TASK-109/110 ready). /accounts 500 BUG-020 (socialAccount table missing — TASK-112 ready but db:push not run). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 routes 200. Auth PASS (session active, dashboard loads). Save Draft PASS (post /posts/ow7sfzhycsqmncqbixm created, 13 drafts in dashboard). Logout timeout (flaky, 38th+ consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 37) | 4 | 2 | TASK-112 | NEW: TASK-111 merged (accounts pages). /accounts now 500 instead of 404 (SqliteError: no such table: socialAccount — needs db:push). TASK-112 created. `/` 500 (BUG-015, button.tsx still present, TASK-109/110 ready). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (login → /dashboard). Save Draft PASS (QA run 37 post, 12 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. |
