@@ -308,3 +308,15 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-30] — NO NEW TASKS CREATED (run 37) — 3 open tasks already cover top priorities. No feature gaps warrant new tasks while button.tsx and accounts pages are still unimplemented. Post dashboard platform/campaign filters (TASK-108 ghost-done) deferred again — create next cycle only if TASK-110/111 are genuinely done (verify via: ls src/components/ui/button*, ls src/app/accounts/, grep socialAccount src/db/schema.ts, git log --oneline -1).
 
 [2026-03-30] — PIPELINE STATUS (run 37) — 3 open tasks: TASK-109 [critical/ready], TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. HEALTHY. Requirements: 0.
+
+[2026-03-30] — HEALTH CHECK PASS (run 38) — pnpm install OK (node v22.17.0), pnpm build OK (19 routes). NEW: /accounts, /accounts/[id], /accounts/new now appear in build — TASK-111 accounts pages were GENUINELY IMPLEMENTED in commit 956b0c5. Better Auth env-var warnings only (expected). button.tsx still present alongside button.ts.
+
+[2026-03-30] — ACCOUNTS PAGES CONFIRMED DONE (run 38) — src/app/accounts/ exists with page.tsx, [id]/page.tsx, new/page.tsx, actions.ts. socialAccount IS in schema.ts (line 102). TASK-111 was ghost-done historically but commit 956b0c5 ("feat(accounts): add socialAccount schema + /accounts pages [TASK-111]") was merged. Task status is still "ready" but code is live.
+
+[2026-03-30] — BUTTON.TSX STILL PRESENT (run 38) — src/components/ui/button.tsx still exists alongside button.ts. TASK-109 and TASK-110 both open/critical/ready covering this. TASK-109 was already in queue; TASK-112 (db:push for socialAccount) was enqueued to triage this run.
+
+[2026-03-30] — CREATED TASK-113 [medium/feature, ready, NOT enqueued] — Add platform and campaign filters to post dashboard. No open task existed (TASK-052/054/108 all ghost-done or cancelled). PostList still has only text search + status tab filters. VISION.md requires platform, campaign, date range filters. Not enqueued (medium — planner will pick up).
+
+[2026-03-30] — ENQUEUED (run 38) — TASK-109 [critical] was already in queue. TASK-112 [high] enqueued to triage.
+
+[2026-03-30] — PIPELINE STATUS (run 38) — 5 open tasks: TASK-109 [critical/queued], TASK-110 [critical/ready/dup], TASK-111 [high/ready/code-done], TASK-112 [high/enqueued], TASK-113 [medium/ready]. HEALTHY. Note: TASK-110 is a duplicate of TASK-109; TASK-111 code is done but task status not yet updated.
