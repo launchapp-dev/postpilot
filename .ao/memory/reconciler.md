@@ -156,3 +156,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 10:24:21Z] — CLEAN_QUEUE — 3 assigned entries (TASK-109 ~6m, TASK-112 ~2m, TASK-115 ~1.5m) all fresh (<30min); 0 dropped
 [2026-03-30 10:24:21Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 10:24:21Z] — PIPELINE_STATUS — Ready: 6 (TASK-114, TASK-109, TASK-112, TASK-115, TASK-116, TASK-113), Queue: 3 (assigned), Open PRs: 1; NOT idle (6 ready + 3 active workflows)
+[2026-03-30 13:23:09Z] — UNBLOCK_TASKS — Unblocked 3 blocked tasks from workflow runner failures: TASK-109 (button.tsx fix), TASK-116 (engagement prediction), TASK-115 (drag-and-drop calendar); 3 unblocked
+[2026-03-30 13:23:09Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-30 13:23:09Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-30 13:23:09Z] — CLEAN_QUEUE — 1 assigned queue entry (TASK-113 triage, assigned ~49s ago) actively processing; 0 dropped
+[2026-03-30 13:23:09Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 13:23:09Z] — PIPELINE_STATUS — Ready: 5 (TASK-109, TASK-116, TASK-115, TASK-114, TASK-113), Queue: 1 (assigned, TASK-113 triage), Open PRs: 1 (TASK-114); NOT idle (5 ready + 1 active workflow)
