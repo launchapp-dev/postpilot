@@ -162,3 +162,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 13:23:09Z] — CLEAN_QUEUE — 1 assigned queue entry (TASK-113 triage, assigned ~49s ago) actively processing; 0 dropped
 [2026-03-30 13:23:09Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 13:23:09Z] — PIPELINE_STATUS — Ready: 5 (TASK-109, TASK-116, TASK-115, TASK-114, TASK-113), Queue: 1 (assigned, TASK-113 triage), Open PRs: 1 (TASK-114); NOT idle (5 ready + 1 active workflow)
+[2026-03-30 22:15:00Z] — UNBLOCK_TASKS — Unblocked TASK-118 (pnpm db:push) from workflow runner failure, set to ready for retry; 1 unblocked
+[2026-03-30 22:15:00Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-30 22:15:00Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-30 22:15:00Z] — CLEAN_QUEUE — Queue empty; 0 dropped
+[2026-03-30 22:15:00Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 22:15:00Z] — PIPELINE_STATUS — Ready: 6 (TASK-118, TASK-119, TASK-109, TASK-117, TASK-113, TASK-116), Queue: 0, Open PRs: 1 (TASK-114); NOT idle (6 ready tasks flowing for daemon execution)
