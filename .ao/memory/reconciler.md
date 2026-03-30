@@ -150,3 +150,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 08:15:29Z] — CLEAN_QUEUE — 1 assigned queue entry (TASK-114 triage, assigned ~21m ago) actively processing; 0 dropped
 [2026-03-30 08:15:29Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 08:15:29Z] — PIPELINE_STATUS — Ready: 4 (TASK-109, TASK-112, TASK-113, TASK-114), Queue: 1 (assigned, TASK-114 triage), Open PRs: 0; NOT idle (1 active workflow)
+[2026-03-30 10:24:21Z] — UNBLOCK_TASKS — No blocked tasks; 0 unblocked
+[2026-03-30 10:24:21Z] — PROMOTE_BACKLOG — No backlog tasks; 0 promoted
+[2026-03-30 10:24:21Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-30 10:24:21Z] — CLEAN_QUEUE — 3 assigned entries (TASK-109 ~6m, TASK-112 ~2m, TASK-115 ~1.5m) all fresh (<30min); 0 dropped
+[2026-03-30 10:24:21Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 10:24:21Z] — PIPELINE_STATUS — Ready: 6 (TASK-114, TASK-109, TASK-112, TASK-115, TASK-116, TASK-113), Queue: 3 (assigned), Open PRs: 1; NOT idle (6 ready + 3 active workflows)
