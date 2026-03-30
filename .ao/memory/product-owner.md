@@ -374,3 +374,13 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-30] — NO NEW TASKS CREATED (run 44) — 5 open tasks at run start (TASK-109, TASK-114, TASK-117, TASK-113, TASK-116). At saturation threshold. All VISION.md gaps covered. Queue was empty at run start — enqueued TASK-109 [critical] and TASK-114 [critical] to triage.
 
 [2026-03-30] — PIPELINE STATUS (run 44) — 5 open tasks: TASK-109 [critical/enqueued], TASK-114 [critical/enqueued], TASK-117 [high/ready], TASK-113 [medium/ready], TASK-116 [medium/ready]. HEALTHY. Requirements: 0. Top concern: TASK-109/114 have code on their branches but remain unmerged — planner must merge not re-implement.
+
+[2026-03-30] — HEALTH CHECK PASS (run 45) — pnpm install OK. pnpm build FAILS with Node 20 (ERR_DLOPEN_FAILED: better-sqlite3 compiled for NODE_MODULE_VERSION 127 = Node 22). pnpm build PASSES with Node 22 (18 routes: /, accounts, accounts/[id], accounts/new, analytics, api/auth/[...all], api/posts/generate, calendar, campaigns, campaigns/[id], campaigns/new, dashboard, login, posts, posts/[id], posts/new, settings, signup). .nvmrc missing confirmed. socialAccount table missing from postpilot.db confirmed (sqlite3 postpilot.db .tables — no socialAccount). button.tsx still present at src/components/ui/button.tsx.
+
+[2026-03-30] — GHOST-DONE CONFIRMED (run 45) — TASK-114 (.nvmrc) ghost-done: .nvmrc does not exist at repo root. TASK-112 (db:push socialAccount) ghost-done: socialAccount table not in postpilot.db despite being in schema.ts. TASK-109 (button.tsx delete) ghost-done again (still present). Pipeline had 4 open tasks at run start: TASK-109 [critical], TASK-117 [high], TASK-113 [medium], TASK-116 [medium].
+
+[2026-03-30] — CREATED TASK-118 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Run pnpm db:push — socialAccount table missing (TASK-112 ghost-done). /accounts 500 confirmed 57+ consecutive QA runs. socialAccount in schema.ts line 102 but NOT in postpilot.db. Verification checklist: sqlite3 .tables must include socialAccount, /accounts must return 200.
+
+[2026-03-30] — CREATED TASK-119 [critical/chore, ready, enqueued:triage] — FORCE-FIX: Add .nvmrc pinning Node 22 (TASK-114 ghost-done). Build fails with Node 20 (ERR_DLOPEN_FAILED). Fix: create .nvmrc with content '22'. Verification checklist: cat .nvmrc must output '22', git log must show commit.
+
+[2026-03-30] — PIPELINE STATUS (run 45) — 6 open tasks: TASK-109 [critical/ready], TASK-118 [critical/enqueued], TASK-119 [critical/enqueued], TASK-117 [high/ready], TASK-113 [medium/ready], TASK-116 [medium/ready]. HEALTHY. Top concern: 3 critical tasks blocked by ghost-done pattern; /accounts and / both 500 in production.
