@@ -300,3 +300,11 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-30] — DEFERRED — Post dashboard platform/campaign filters. Existing tasks already cover top 2 priorities. Create next cycle if TASK-110/111 are genuinely done (verify via git log + ls + schema.ts grep before trusting done status).
 
 [2026-03-30] — PIPELINE STATUS (run 36) — 3 open tasks: TASK-109 [critical/ready], TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. HEALTHY. Requirements: 0.
+
+[2026-03-30] — HEALTH CHECK SKIPPED (run 37) — READ-ONLY phase. Prior build confirmed passing (16 routes). button.tsx still present (glob: button.ts + button.tsx both in src/components/ui/). src/app/accounts/ still missing (glob: 0 files). socialAccount not in schema.ts. post-list (posts/page.tsx) confirmed: no platform/campaign filter UI.
+
+[2026-03-30] — STATE CONFIRMED (run 37) — TASK-109/110 (button.tsx delete) both "ready"/critical, TASK-111 (accounts pages) "ready"/high. Queue was empty at run start — re-enqueued TASK-110 [critical] and TASK-111 [high] to triage. TASK-109 is a stale duplicate of TASK-110 (cancellation has previously failed — leave as-is).
+
+[2026-03-30] — NO NEW TASKS CREATED (run 37) — 3 open tasks already cover top priorities. No feature gaps warrant new tasks while button.tsx and accounts pages are still unimplemented. Post dashboard platform/campaign filters (TASK-108 ghost-done) deferred again — create next cycle only if TASK-110/111 are genuinely done (verify via: ls src/components/ui/button*, ls src/app/accounts/, grep socialAccount src/db/schema.ts, git log --oneline -1).
+
+[2026-03-30] — PIPELINE STATUS (run 37) — 3 open tasks: TASK-109 [critical/ready], TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. HEALTHY. Requirements: 0.
