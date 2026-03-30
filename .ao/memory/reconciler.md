@@ -114,3 +114,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 11:45:00Z] — CLEAN_QUEUE — Queue empty; 0 dropped
 [2026-03-30 11:45:00Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 11:45:00Z] — PIPELINE_STATUS — Ready: 3 (TASK-109, TASK-110, TASK-111), Queue: 0, Open PRs: 0; NOT idle (3 ready tasks flowing)
+[2026-03-30 05:03:22Z] — UNBLOCK_TASKS — No blocked tasks; 0 unblocked
+[2026-03-30 05:03:22Z] — PROMOTE_BACKLOG — TASK-112 (pnpm db:push) promoted from backlog to ready; 1 promoted
+[2026-03-30 05:03:22Z] — RE_ROUTE_FAILED — No in_progress/review tasks with failures; 0 re-routed
+[2026-03-30 05:03:22Z] — CLEAN_QUEUE — Queue empty; 0 dropped
+[2026-03-30 05:03:22Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 05:03:22Z] — PIPELINE_STATUS — Ready: 4 (TASK-109, TASK-110, TASK-111, TASK-112), Queue: 0, Open PRs: 0; NOT idle (4 ready tasks flowing for daemon execution)
