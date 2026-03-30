@@ -132,3 +132,9 @@ Each entry: `[DATE] — ACTION — DETAILS`
 [2026-03-30 07:35:04Z] — CLEAN_QUEUE — 2 assigned (TASK-109, TASK-112 triage ~1-2m old), 1 pending (TASK-113) all fresh; 0 dropped
 [2026-03-30 07:35:04Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
 [2026-03-30 07:35:04Z] — PIPELINE_STATUS — Ready: 3 (TASK-109, TASK-112, TASK-113), Queue: 3 (2 assigned, 1 pending), Open PRs: 0; NOT idle (active workflow)
+[2026-03-30 07:44:29Z] — UNBLOCK_TASKS — No blocked tasks; 0 unblocked
+[2026-03-30 07:44:29Z] — PROMOTE_BACKLOG — TASK-114 (.nvmrc Node.js pin) promoted from backlog to ready; 1 promoted
+[2026-03-30 07:44:29Z] — RE_ROUTE_FAILED — No in_progress/review tasks; 0 re-routed
+[2026-03-30 07:44:29Z] — CLEAN_QUEUE — TASK-109 (1m ago), TASK-112 (36s ago) both assigned and active; all <30min; 0 dropped
+[2026-03-30 07:44:29Z] — MARK_DONE — No in_progress/review tasks with merged PRs; 0 marked
+[2026-03-30 07:44:29Z] — PIPELINE_STATUS — Ready: 4 (TASK-109, TASK-112, TASK-113, TASK-114), Queue: 3 (2 assigned triage, 1 pending), Open PRs: 0; NOT idle (active workflow)
