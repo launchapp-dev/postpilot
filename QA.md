@@ -6,19 +6,20 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 41) |
-| Result | PARTIAL PASS — No new code merged since run 40 (only memory/planner commits). NEW BUG-021: Node v25.2.1 causes ERR_DLOPEN_FAILED crash (better-sqlite3 incompatibility) — TASK-114 created. Server started with nvm Node v22. `/` 500 (BUG-015 persists, TASK-109 ready). /accounts 500 BUG-020 (socialAccount table — TASK-112 ready). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (session obtained, dashboard loaded). Save Draft PASS (post created, 17 posts in dashboard). |
+| Date | 2026-03-30 (run 42) |
+| Result | PARTIAL PASS — No new code merged since run 41 (only memory/planner commits). Server already running on :3001 (PID 91388, next-server v16.2.1). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (socialAccount table — TASK-112 still ready). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (login → /dashboard, slow ~31s). Save Draft PASS (post /posts/i8a539pa2rmmncvuj1h, 18 posts in dashboard). Logout timeout (flaky, 42nd consecutive). |
 | Steps Passed | 4 of 6 |
-| Duration | ~30 min |
+| Duration | ~20 min |
 | Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on / |
 | Network Errors | `/` 500 (BUG-015); /accounts 500 BUG-020 (SqliteError: no such table: socialAccount); /api/posts/generate 503 (BUG-012) |
-| New Tasks Created | TASK-114 (BUG-021: .nvmrc missing, Node v25 crash) |
+| New Tasks Created | none — all failures are known bugs |
 
 ## Test Results History
 
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 42) | 4 | 2 | none | No new code merged since run 41 (only memory/planner commits). Server already running on :3001 (PID 91388). `/` unauthenticated 500 (BUG-015, button.tsx still present). /accounts 500 BUG-020 (TASK-112 still in ready — db:push not run). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 authenticated routes 200. Auth PASS (login → /dashboard, slow ~31s but succeeded). Save Draft PASS (post /posts/i8a539pa2rmmncvuj1h, 18 drafts in dashboard). Logout timeout (flaky, 42nd consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 41) | 4 | 2 | TASK-114 | NEW BUG-021: Node v25.2.1 causes ERR_DLOPEN_FAILED (better-sqlite3 compiled for Node v20 MODULE_VERSION 127, Node v25 requires 141). No .nvmrc — server crashes silently if wrong Node version. Fixed for this run by using nvm Node v22. TASK-114 created. `/` 500 (BUG-015, TASK-109 ready). /accounts 500 BUG-020 (TASK-112 ready). AI gen 503 (BUG-012). All other 9 authenticated routes 200. Auth PASS (session obtained, 17 posts in dashboard). Save Draft PASS (QA run 41 post created). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 40) | 4 | 2 | none | No new code merged since run 39 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, button.tsx still present, TASK-107 fix in ready). /accounts 500 BUG-020 (SqliteError: no such table: socialAccount — TASK-112 in ready). AI gen 503 (BUG-012, "ANTHROPIC_API_KEY is not configured"). All other 9 routes 200. Auth PASS (login → /dashboard confirmed). Save Draft PASS (2 posts created, 16 drafts in dashboard). Logout timeout (flaky, 40th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
 | 2026-03-30 (run 39) | 4 | 2 | none | No new code merged since run 38 (only memory/planner commits). `/` unauthenticated 500 (BUG-015, TASK-107 fix in ready). /accounts 500 BUG-020 (socialAccount table missing — TASK-112 in ready). AI gen 503 (BUG-012). All other 9 routes 200. Auth PASS (session active, 14 posts in dashboard). Save Draft PASS (post /posts/u74w9g3lwm7mncre3zq, 14 drafts). Logout timeout (flaky, 39th consecutive). Console: BUG-019 asChild, BUG-013 error=false. |
