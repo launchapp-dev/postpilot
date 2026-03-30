@@ -6,8 +6,8 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-03-30 (run 35) |
-| Result | PARTIAL PASS — No new code merged to main since run 34 (only memory/planner commits). Server already running on :3001 (PID 32564, next dev). `/` unauthenticated 500 (BUG-015 persists). /accounts 404 (BUG-007 persists). AI gen 503 "ANTHROPIC_API_KEY is not configured" (BUG-012 persists). All other authenticated routes 200. Auth PASS (login → /dashboard, browser confirmed). Save Draft PASS (post /posts/h6zhnue5yypmncn3hgn created, appeared in dashboard with 10 drafts). TASK-107 fix commit e16651d still not merged — 35th run with BUG-015. |
+| Date | 2026-03-30 (run 36) |
+| Result | PARTIAL PASS — No new code merged to main since run 35 (only memory/planner/product-owner commits). Server already running on :3001. `/` unauthenticated 500 (BUG-015 persists). Authenticated `/` → 307→/dashboard. /accounts 404 (BUG-007 persists). AI gen 503 "ANTHROPIC_API_KEY is not configured" (BUG-012 persists). All other 9 authenticated routes 200. Auth PASS (login → /dashboard, ~5s redirect). Save Draft PASS (post /posts/z011xfhmnwemnco5744 created, dashboard shows 11 drafts). TASK-107 fix commit e16651d still not merged — 36th run with BUG-015. |
 | Steps Passed | 4 of 6 |
 | Duration | ~15 min |
 | Console Errors | BUG-019 asChild on all auth routes; BUG-013 error=false; BUG-015 500 on / |
@@ -19,6 +19,7 @@ This is a living document maintained by the QA agent. It tracks test results, kn
 <!-- QA agent: append each run result here. Format: | Date | Passed | Failed | Bugs Created | Notes | -->
 | Date | Passed | Failed | Bugs Created | Notes |
 |------|--------|--------|-------------|-------|
+| 2026-03-30 (run 36) | 4 | 2 | none | No new code merged since run 35 (only memory/planner/product-owner commits). Server already running on :3001. `/` unauthenticated 500 (BUG-015), authenticated `/` → 307→/dashboard. /accounts 404 (BUG-007). AI gen 503 (BUG-012). All other 9 routes 200. Auth PASS (login → /dashboard, ~5s). Save Draft PASS (post /posts/z011xfhmnwemnco5744, 11 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix commit e16651d still not merged (36th run). |
 | 2026-03-30 (run 35) | 4 | 2 | none | No new code merged since run 34 (only memory/planner commits). Server on :3001 (PID 32564). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other 8 routes 200. Auth PASS (login → /dashboard). Save Draft PASS (post /posts/h6zhnue5yypmncn3hgn, 10 drafts in dashboard). Console: BUG-019 asChild, BUG-013 error=false. TASK-107 fix commit e16651d still not merged (35th run). |
 | 2026-03-30 (run 34) | 4 | 2 | none | No new code merged since run 33 (only memory/planner commits). Server started fresh on :3001 (node v22). `/` 500 (BUG-015), /accounts 404 (BUG-007), AI gen 503 (BUG-012). All other routes 200. Auth PASS (browser login ~8s redirect). Save Draft PASS (post /posts/pz57ocqscasmncm64gq). Logout timeout (flaky, 34th consecutive). TASK-107 fix still not merged. |
 | 2026-03-28 (run 13) | 1 | 5 | none | No new code merged since run 12. App state identical. All known bugs persist (BUG-007/012/015/016/017/018). Browser-based login redirects to crashing dashboard. Auth API 200 confirmed. Logout timeout again (flaky, run 13). /posts/new + /settings + /campaigns/new + /signup PASS. |
