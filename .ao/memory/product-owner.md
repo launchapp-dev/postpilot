@@ -278,3 +278,25 @@ Each entry: `[DATE] — DECISION — REASON`
 [2026-03-29] — PIPELINE STATUS (run 34) — 3 open tasks: TASK-107 [critical/assigned], TASK-104 [high/assigned], TASK-108 [medium/blocked]. HEALTHY.
 
 [2026-03-29] — PIPELINE STATUS (run 33) — 3 open tasks: TASK-107 [critical/enqueued], TASK-104 [high/enqueued], TASK-108 [medium/ready]. HEALTHY. Requirements: 0.
+
+[2026-03-30] — HEALTH CHECK SKIPPED (run 35) — READ-ONLY phase. Prior build confirmed passing (16 routes). button.tsx still present (git log: only 63cd453, no deletion). src/app/accounts/ still missing (glob: 0 files). socialAccount not in schema.ts (grep: 0 matches). post-list.tsx: no platform/campaign filters.
+
+[2026-03-30] — GHOST-DONE CONFIRMED AGAIN (run 35) — TASK-107 (button.tsx delete) ghost-done: button.tsx still present. TASK-104 (accounts pages) ghost-done: src/app/accounts/ still missing, no socialAccount in schema.ts. TASK-108 (post filters) ghost-done or cancelled. Pipeline was empty (0 open tasks). git log shows only memory/planner commits (latest: 15e1c28).
+
+[2026-03-30] — CREATED TASK-110 [critical/bugfix, ready, enqueued:triage] — FORCE-FIX: Delete button.tsx to resolve dev server 500. Ghost-done/cancelled 27 TIMES: TASK-046 through TASK-107.
+
+[2026-03-30] — CREATED TASK-111 [high/feature, ready, enqueued:triage] — FORCE-BUILD: Social Accounts pages /accounts, /accounts/new, /accounts/[id] + socialAccount DB schema + server actions. Ghost-done 27+ TIMES (TASK-008 through TASK-108).
+
+[2026-03-30] — DEFERRED — Post dashboard platform/campaign filters. 2-task limit reached. Create next cycle if TASK-110/111 are genuinely done (verify via git log + ls + schema.ts grep before trusting done status).
+
+[2026-03-30] — PIPELINE STATUS (run 35) — 2 open tasks: TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. HEALTHY. Requirements: 0.
+
+[2026-03-30] — HEALTH CHECK SKIPPED (run 36) — READ-ONLY phase. Prior build confirmed passing (16 routes). button.tsx still present (glob: button.ts + button.tsx both in src/components/ui/). src/app/accounts/ still missing (glob: 0 files). socialAccount not in schema.ts (grep: 0 matches).
+
+[2026-03-30] — GHOST-DONE CONFIRMED AGAIN (run 36) — TASK-110 (button.tsx delete) and TASK-111 (accounts pages) both still in "ready" status — not ghost-done yet (queue was empty, tasks not yet executed). TASK-109 found as duplicate of TASK-110 (also "ready/critical/button.tsx delete"); cancellation failed (CLI error), left as-is. Queue was empty at run start — re-enqueued TASK-110 [critical] and TASK-111 [high] to triage.
+
+[2026-03-30] — NO NEW TASKS CREATED (run 36) — 3 open tasks cover top priorities: TASK-109 [critical/ready], TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. TASK-109 is a duplicate of TASK-110 but cancellation failed. No gaps beyond existing tasks require new task creation. 2-task limit not needed.
+
+[2026-03-30] — DEFERRED — Post dashboard platform/campaign filters. Existing tasks already cover top 2 priorities. Create next cycle if TASK-110/111 are genuinely done (verify via git log + ls + schema.ts grep before trusting done status).
+
+[2026-03-30] — PIPELINE STATUS (run 36) — 3 open tasks: TASK-109 [critical/ready], TASK-110 [critical/enqueued], TASK-111 [high/enqueued]. HEALTHY. Requirements: 0.
